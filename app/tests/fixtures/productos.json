@@ -1,16 +1,174 @@
 {
-  "source": "app/src/data/menu.js:11-22",
-  "note": "Catálogo base del prototipo; debe coincidir con supabase/seed.sql. Las imágenes se resuelven en Storage (todo 7).",
+  "source": "app/src/data/menu.js",
+  "note": "Catálogo base del prototipo; debe coincidir con supabase/seed.sql. Imágenes locales en app/public/img/productos.",
   "productos": [
-    { "nombre": "Almuerzo Ejecutivo", "precio": 12000, "categoria": "almuerzos", "es_almuerzo": true, "stock": 15 },
-    { "nombre": "Almuerzo Vegetariano", "precio": 11000, "categoria": "almuerzos", "es_almuerzo": true, "stock": 12 },
-    { "nombre": "Pechuga a la Plancha", "precio": 14000, "categoria": "almuerzos", "es_almuerzo": true, "stock": 10 },
-    { "nombre": "Calentado Paisa", "precio": 8000, "categoria": "desayunos", "es_almuerzo": false, "stock": 20 },
-    { "nombre": "Huevos Rancheros", "precio": 7500, "categoria": "desayunos", "es_almuerzo": false, "stock": 18 },
-    { "nombre": "Cafe Latte", "precio": 4500, "categoria": "bebidas", "es_almuerzo": false, "stock": 30 },
-    { "nombre": "Jugo Natural", "precio": 4000, "categoria": "bebidas", "es_almuerzo": false, "stock": 25 },
-    { "nombre": "Limonada de Coco", "precio": 5500, "categoria": "bebidas", "es_almuerzo": false, "stock": 20 },
-    { "nombre": "Empanada de Pollo", "precio": 3000, "categoria": "snacks", "es_almuerzo": false, "stock": 40 },
-    { "nombre": "Brownie con Helado", "precio": 6000, "categoria": "snacks", "es_almuerzo": false, "stock": 8 }
+    {
+      "nombre": "Almuerzo Ejecutivo",
+      "precio": 12000,
+      "categoria": "almuerzos",
+      "es_almuerzo": true,
+      "stock": 15
+    },
+    {
+      "nombre": "Almuerzo Vegetariano",
+      "precio": 11000,
+      "categoria": "almuerzos",
+      "es_almuerzo": true,
+      "stock": 12
+    },
+    {
+      "nombre": "Pechuga a la Plancha",
+      "precio": 14000,
+      "categoria": "almuerzos",
+      "es_almuerzo": true,
+      "stock": 10
+    },
+    {
+      "nombre": "Combo Almuerzo + Bebida",
+      "precio": 15000,
+      "categoria": "almuerzos",
+      "es_almuerzo": true,
+      "stock": 10
+    },
+    {
+      "nombre": "Calentado Paisa",
+      "precio": 8000,
+      "categoria": "desayunos",
+      "es_almuerzo": false,
+      "stock": 20
+    },
+    {
+      "nombre": "Huevos Rancheros",
+      "precio": 7500,
+      "categoria": "desayunos",
+      "es_almuerzo": false,
+      "stock": 18
+    },
+    {
+      "nombre": "Sándwich de Pollo",
+      "precio": 8500,
+      "categoria": "desayunos",
+      "es_almuerzo": false,
+      "stock": 14
+    },
+    {
+      "nombre": "Yogurt con Granola",
+      "precio": 4500,
+      "categoria": "desayunos",
+      "es_almuerzo": false,
+      "stock": 16
+    },
+    {
+      "nombre": "Café Latte",
+      "precio": 4500,
+      "categoria": "bebidas",
+      "es_almuerzo": false,
+      "stock": 30
+    },
+    {
+      "nombre": "Jugo Natural",
+      "precio": 4000,
+      "categoria": "bebidas",
+      "es_almuerzo": false,
+      "stock": 25
+    },
+    {
+      "nombre": "Limonada de Coco",
+      "precio": 5500,
+      "categoria": "bebidas",
+      "es_almuerzo": false,
+      "stock": 20
+    },
+    {
+      "nombre": "Agua sin Gas 600 ml",
+      "precio": 3000,
+      "categoria": "bebidas",
+      "es_almuerzo": false,
+      "stock": 40
+    },
+    {
+      "nombre": "Jugo Hit 500 ml",
+      "precio": 3500,
+      "categoria": "bebidas",
+      "es_almuerzo": false,
+      "stock": 36
+    },
+    {
+      "nombre": "Gaseosa Personal 400 ml",
+      "precio": 4000,
+      "categoria": "bebidas",
+      "es_almuerzo": false,
+      "stock": 30
+    },
+    {
+      "nombre": "Café Americano",
+      "precio": 3500,
+      "categoria": "bebidas",
+      "es_almuerzo": false,
+      "stock": 35
+    },
+    {
+      "nombre": "Bebida Energizante",
+      "precio": 6500,
+      "categoria": "bebidas",
+      "es_almuerzo": false,
+      "stock": 18
+    },
+    {
+      "nombre": "Empanada de Pollo",
+      "precio": 3000,
+      "categoria": "snacks",
+      "es_almuerzo": false,
+      "stock": 40
+    },
+    {
+      "nombre": "Papas Margarita",
+      "precio": 3500,
+      "categoria": "snacks",
+      "es_almuerzo": false,
+      "stock": 45
+    },
+    {
+      "nombre": "Chocorramo",
+      "precio": 3000,
+      "categoria": "snacks",
+      "es_almuerzo": false,
+      "stock": 30
+    },
+    {
+      "nombre": "Galletas Festival",
+      "precio": 2000,
+      "categoria": "snacks",
+      "es_almuerzo": false,
+      "stock": 50
+    },
+    {
+      "nombre": "Chocolate Jet",
+      "precio": 2500,
+      "categoria": "snacks",
+      "es_almuerzo": false,
+      "stock": 40
+    },
+    {
+      "nombre": "Maní Tostado",
+      "precio": 2000,
+      "categoria": "snacks",
+      "es_almuerzo": false,
+      "stock": 35
+    },
+    {
+      "nombre": "Obleas con Arequipe",
+      "precio": 2500,
+      "categoria": "snacks",
+      "es_almuerzo": false,
+      "stock": 25
+    },
+    {
+      "nombre": "Paquete Surtido",
+      "precio": 7500,
+      "categoria": "snacks",
+      "es_almuerzo": false,
+      "stock": 12
+    }
   ]
 }

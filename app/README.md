@@ -9,9 +9,9 @@ Aplicación web (prototipo) para la cafetería de la **Universidad de Santander 
 ## ✨ Funcionalidades
 
 ### 👤 Panel de usuario (estudiantes)
-- **Selector de cafetería**: 3 cafeterías (nombres placeholder); una de ellas **no vende almuerzos** y su menú oculta los almuerzos automáticamente.
+- **Selector de cafetería**: 3 cafeterías (nombres placeholder); una de ellas **no vende almuerzos ni desayunos**, así que su menú solo muestra bebidas y snacks.
 - **Login** con correo institucional (simulado; cualquier correo válido entra).
-- **Menú por categorías**: Almuerzos, Desayunos, Bebidas y **Snacks y tienda** (25 productos: paquetes, dulces, bebidas, sándwiches…).
+- **Menú por categorías**: Almuerzos, Desayunos, Bebidas y **Snacks y tienda** (24 productos: paquetes, dulces, bebidas, sándwiches…), todos con imagen local.
 - **Carrito** con control de cantidades limitado por el **stock** disponible.
 - **Hora de recogida programada** (11:30 a.m. – 2:00 p.m. en intervalos de 15 min) — aparece solo si el carrito contiene un almuerzo (*progressive disclosure*).
 - **Bloqueo por cupo y por tiempo**: cada franja tiene cupo por cafetería; cuando se llena muestra **“Sin cupos”** y no se puede seleccionar. También se bloquea si la cola estimada no alcanza a prepararse antes del cierre (**“No alcanza a prepararse antes del cierre”**).

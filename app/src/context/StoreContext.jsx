@@ -101,13 +101,21 @@ export function StoreProvider({ children }) {
       const caf = cafeteriaPorId(id);
       if (!caf) return;
 
-      // Si la cafetería no vende almuerzos, no se puede llevar un almuerzo.
-      if (!caf.vendeAlmuerzos) {
-        const teniaAlmuerzo = cart.some((i) => i.isLunch);
-        if (teniaAlmuerzo) {
-          setCart((c) => c.filter((i) => !i.isLunch));
-          showToast('Quitamos los almuerzos: esa cafetería no los vende', 'warning');
-        }
+      // Si la cafetería no vende almuerzos/desayunos, no se puede llevar esos ítems.
+      const incompatible = cart.some(
+        (i) =>
+          (i.category === 'almuerzos' && !caf.vendeAlmuerzos) ||
+          (i.category === 'desayunos' && !caf.vendeDesayunos)
+      );
+      if (incompatible) {
+        setCart((c) =>
+          c.filter(
+            (i) =>
+              (i.category !== 'almuerzos' || caf.vendeAlmuerzos) &&
+              (i.category !== 'desayunos' || caf.vendeDesayunos)
+          )
+        );
+        showToast('Quitamos los productos que esa cafetería no vende', 'warning');
       }
 
       setCafeteriaId(id);
@@ -152,7 +160,8 @@ export function StoreProvider({ children }) {
     if (!cafeteriaActual) return [];
     return products.filter((p) => {
       if (p.cafeteriaId && p.cafeteriaId !== cafeteriaActual.id) return false;
-      if (p.isLunch && !cafeteriaActual.vendeAlmuerzos) return false;
+      if (p.category === 'almuerzos' && !cafeteriaActual.vendeAlmuerzos) return false;
+      if (p.category === 'desayunos' && !cafeteriaActual.vendeDesayunos) return false;
       return true;
     });
   }, [products, cafeteriaActual]);

@@ -120,8 +120,8 @@ export default function MenuManager() {
                   </label>
                 </div>
                 <label htmlFor="f-img" className="mb-1 mt-3 block text-sm font-semibold">o pega una URL de imagen</label>
-                <input id="f-img" type="url" value={form.image.startsWith('data:') ? '' : form.image}
-                  onChange={(e) => setForm({ ...form, image: e.target.value })} placeholder="https://…"
+                <input id="f-img" type="text" inputMode="url" value={form.image?.startsWith('data:') ? '' : (form.image ?? '')}
+                  onChange={(e) => setForm({ ...form, image: e.target.value })} placeholder="https://… o /img/productos/…"
                   className="w-full rounded-xl border border-slate-300 px-4 py-2.5" />
               </div>
             </div>

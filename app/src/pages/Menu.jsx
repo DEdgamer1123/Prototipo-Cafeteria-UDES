@@ -19,19 +19,53 @@ export default function Menu() {
   const [category, setCategory] = useState('almuerzos');
   const [loading, setLoading] = useState(true);
 
-  // Delay simulado para mostrar skeletons
-  useEffect(() => {
-    setLoading(true);
-    const t = setTimeout(() => setLoading(false), 700);
-    return () => clearTimeout(t);
-  }, [category]);
-
   // Sin cafetería elegida no se puede ver el menú
   if (!cafeteriaActual) {
     return <Navigate to="/cafeteria" replace />;
   }
 
-  const filtered = productosVisibles.filter((p) => p.category === category);
+  // Categorías que esta cafetería sí vende
+  const categoriasVisibles = CATEGORIES.filter(
+    (c) =>
+      (c.id !== 'almuerzos' || cafeteriaActual.vendeAlmuerzos) &&
+      (c.id !== 'desayunos' || cafeteriaActual.vendeDesayunos)
+  );
+  const categoriaActiva = categoriasVisibles.some((c) => c.id === category)
+    ? category
+    : categoriasVisibles[0].id;
+
+  return (
+    <MenuContent
+      categoriaActiva={categoriaActiva}
+      setCategory={setCategory}
+      categoriasVisibles={categoriasVisibles}
+      productosVisibles={productosVisibles}
+      cafeteriaActual={cafeteriaActual}
+      loading={loading}
+      setLoading={setLoading}
+    />
+  );
+}
+
+function MenuContent({
+  categoriaActiva,
+  setCategory,
+  categoriasVisibles,
+  productosVisibles,
+  cafeteriaActual,
+  loading,
+  setLoading,
+}) {
+  // Delay simulado para mostrar skeletons
+  useEffect(() => {
+    setLoading(true);
+    const t = setTimeout(() => setLoading(false), 500);
+    return () => clearTimeout(t);
+  }, [categoriaActiva, setLoading]);
+
+  const filtered = productosVisibles.filter((p) => p.category === categoriaActiva);
+  const sinAlmuerzos = !cafeteriaActual.vendeAlmuerzos;
+  const sinDesayunos = !cafeteriaActual.vendeDesayunos;
 
   return (
     <main id="contenido" className="mx-auto max-w-6xl px-4 py-8">
@@ -45,9 +79,13 @@ export default function Menu() {
               Cambiar
             </Link>
           </p>
-          {!cafeteriaActual.vendeAlmuerzos && (
+          {(sinAlmuerzos || sinDesayunos) && (
             <p className="mt-1 text-xs font-bold text-warning">
-              Esta cafetería no vende almuerzos: solo bebidas, desayunos y snacks.
+              {sinAlmuerzos && sinDesayunos
+                ? 'Esta cafetería no vende almuerzos ni desayunos: solo bebidas y snacks.'
+                : sinAlmuerzos
+                  ? 'Esta cafetería no vende almuerzos.'
+                  : 'Esta cafetería no vende desayunos.'}
             </p>
           )}
         </div>
@@ -56,18 +94,18 @@ export default function Menu() {
         Solo los <strong>almuerzos</strong> se pueden programar con hora de recogida
       </p>
 
-      {/* Ley de Hick: 4 categorias, una sola decision */}
+      {/* Ley de Hick: pocas categorías, una sola decisión */}
       <div role="tablist" aria-label="Categorías del menú" className="mb-8 flex flex-wrap gap-2">
-        {CATEGORIES.map((c) => {
+        {categoriasVisibles.map((c) => {
           const Icon = CATEGORY_ICON[c.id];
           return (
             <button
               key={c.id}
               role="tab"
-              aria-selected={category === c.id}
+              aria-selected={categoriaActiva === c.id}
               onClick={() => setCategory(c.id)}
               className={`flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold transition-colors duration-fast ${
-                category === c.id
+                categoriaActiva === c.id
                   ? 'bg-udes-blue text-white shadow-card'
                   : 'bg-white text-udes-blue hover:bg-udes-blue-light'
               }`}

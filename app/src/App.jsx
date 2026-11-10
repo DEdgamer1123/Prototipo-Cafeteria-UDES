@@ -16,13 +16,38 @@ import MenuManager from './pages/admin/MenuManager';
 import OrdersQueue from './pages/admin/OrdersQueue';
 
 export default function App() {
-  const [user, setUser] = useState(null);
+  // Sesión de demo persistida en sessionStorage: recargar no obliga a reingresar.
+  const [user, setUser] = useState(() => {
+    try {
+      return JSON.parse(sessionStorage.getItem('udesfood_user') || 'null');
+    } catch {
+      return null;
+    }
+  });
+
+  const login = (u) => {
+    setUser(u);
+    try {
+      sessionStorage.setItem('udesfood_user', JSON.stringify(u));
+    } catch {
+      /* sessionStorage no disponible */
+    }
+  };
+
+  const logout = () => {
+    setUser(null);
+    try {
+      sessionStorage.removeItem('udesfood_user');
+    } catch {
+      /* sessionStorage no disponible */
+    }
+  };
 
   const UserShell = () => (
     // min-h-dvh: usa la altura real del viewport (en celulares el vh
     // clasico se corta por la barra del navegador)
     <div className="flex min-h-dvh flex-col">
-      <Navbar user={user} onLogout={() => setUser(null)} />
+      <Navbar user={user} onLogout={logout} />
       <OrderNotifier userName={user?.name} />
       <div className="flex-1">
         <Outlet />
@@ -41,7 +66,7 @@ export default function App() {
     <StoreProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={user ? <Navigate to={user.role === 'admin' ? '/admin' : '/menu'} /> : <Login onLogin={setUser} />} />
+          <Route path="/" element={user ? <Navigate to={user.role === 'admin' ? '/admin' : '/menu'} /> : <Login onLogin={login} />} />
 
           <Route element={<RequireAuth><UserShell /></RequireAuth>}>
             <Route path="/cafeteria" element={<CafeteriaSelector />} />
@@ -51,7 +76,7 @@ export default function App() {
             <Route path="/pedidos" element={<Orders user={user} />} />
           </Route>
 
-          <Route path="/admin" element={<RequireAuth role="admin"><AdminLayout onLogout={() => setUser(null)} /></RequireAuth>}>
+          <Route path="/admin" element={<RequireAuth role="admin"><AdminLayout onLogout={logout} /></RequireAuth>}>
             <Route index element={<Navigate to="pedidos" replace />} />
             <Route path="pedidos" element={<OrdersQueue />} />
             <Route path="menu" element={<MenuManager />} />
