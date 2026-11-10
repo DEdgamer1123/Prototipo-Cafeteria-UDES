@@ -24,5 +24,5 @@ export const MENU = [
 // Franjas de recogida para almuerzos (Ley de Hick: opciones limitadas y claras)
 export const PICKUP_SLOTS = ['11:30', '11:45', '12:00', '12:15', '12:30', '12:45', '13:00', '13:15', '13:30', '13:45', '14:00'];
 
-export const formatCOP = (n) =>
-  n.toLocaleString('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 });
+// Re-export desde el módulo único de dinero (fuente de verdad).
+export { formatCOP } from '../lib/money';
