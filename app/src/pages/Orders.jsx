@@ -1,15 +1,24 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Receipt, BellRing, Clock, Store, QrCode, CreditCard } from 'lucide-react';
+import { Receipt, BellRing, Clock, Store, QrCode, CreditCard, XCircle } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { formatCOP } from '../data/menu';
 import StatusBadge from '../components/StatusBadge';
 import { SkeletonRow } from '../components/Skeletons';
 
 export default function Orders({ user }) {
-  const { orders } = useStore();
+  const { orders, setOrderStatus, showToast } = useStore();
   const [loading, setLoading] = useState(true);
   const mine = orders.filter((o) => o.customer === user?.name);
+
+  const cancelar = async (o) => {
+    const confirmado = window.confirm(
+      `¿Cancelar el pedido ${o.id}? Se devolverá el stock de los productos.`
+    );
+    if (!confirmado) return;
+    const ok = await setOrderStatus(o.id, 'cancelado');
+    if (ok) showToast(`Pedido ${o.id} cancelado`, 'warning');
+  };
 
   useEffect(() => {
     const t = setTimeout(() => setLoading(false), 600);
@@ -94,6 +103,15 @@ export default function Orders({ user }) {
                   </span>
                 )}
               </div>
+
+              {(o.status === 'pendiente_pago' || o.status === 'recibido') && (
+                <button
+                  onClick={() => cancelar(o)}
+                  className="mt-3 flex w-full items-center justify-center gap-2 rounded-full border-2 border-danger/30 bg-danger-light py-2.5 text-sm font-bold text-danger transition-colors duration-fast hover:bg-danger hover:text-white"
+                >
+                  <XCircle size={16} aria-hidden="true" /> Cancelar pedido
+                </button>
+              )}
             </li>
           ))}
         </ul>

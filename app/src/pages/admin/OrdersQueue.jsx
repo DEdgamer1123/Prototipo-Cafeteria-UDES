@@ -30,6 +30,15 @@ export default function OrdersQueue() {
     if (ok) showToast(`Transferencia de ${o.id} rechazada — stock devuelto`, 'warning');
   };
 
+  const cancelar = async (o) => {
+    const confirmado = window.confirm(
+      `¿Cancelar el pedido ${o.id}? Se devolverá el stock de los productos.`
+    );
+    if (!confirmado) return;
+    const ok = await setOrderStatus(o.id, 'cancelado');
+    if (ok) showToast(`Pedido ${o.id} cancelado — stock devuelto`, 'warning');
+  };
+
   const pendientesPago = visible.filter((o) => o.status === 'pendiente_pago');
   const pending = visible.filter((o) => ['recibido', 'preparando'].includes(o.status));
   const ready = visible.filter((o) => o.status === 'listo');
@@ -45,6 +54,7 @@ export default function OrdersQueue() {
 
   const OrderCard = ({ o }) => {
     const esTransferencia = o.paymentMethod === 'transferencia';
+    const puedeCancelar = ['recibido', 'preparando', 'listo'].includes(o.status);
     return (
       <li className="rounded-card bg-white p-5 shadow-card">
         <div className="flex flex-wrap items-center justify-between gap-2">
@@ -102,18 +112,32 @@ export default function OrdersQueue() {
           </div>
         )}
 
-        {/* Flujo normal de preparación */}
-        {NEXT_STATE[o.status] && (
-          <button
-            onClick={() => advance(o)}
-            className={`mt-3 flex w-full items-center justify-center gap-2 rounded-full py-2.5 text-sm font-bold text-white transition-colors duration-fast ${
-              o.status === 'preparando' ? 'bg-success hover:opacity-90' : 'bg-udes-blue hover:bg-udes-blue-dark'
-            }`}
-          >
-            {o.status === 'recibido'
-              ? (<><Flame size={16} aria-hidden="true" /> Iniciar preparación</>)
-              : (<><BellRing size={16} aria-hidden="true" /> Marcar como listo y notificar</>)}
-          </button>
+        {/* Flujo normal + cancelación */}
+        {(NEXT_STATE[o.status] || puedeCancelar) && (
+          <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
+            {NEXT_STATE[o.status] && (
+              <button
+                onClick={() => advance(o)}
+                className={`flex w-full items-center justify-center gap-2 rounded-full py-2.5 text-sm font-bold text-white transition-colors duration-fast ${
+                  o.status === 'preparando' ? 'bg-success hover:opacity-90' : 'bg-udes-blue hover:bg-udes-blue-dark'
+                }`}
+              >
+                {o.status === 'recibido'
+                  ? (<><Flame size={16} aria-hidden="true" /> Iniciar preparación</>)
+                  : (<><BellRing size={16} aria-hidden="true" /> Marcar como listo y notificar</>)}
+              </button>
+            )}
+            {puedeCancelar && (
+              <button
+                onClick={() => cancelar(o)}
+                className={`flex w-full items-center justify-center gap-2 rounded-full border-2 border-danger/30 bg-danger-light py-2.5 text-sm font-bold text-danger transition-colors duration-fast hover:bg-danger hover:text-white ${
+                  !NEXT_STATE[o.status] ? 'sm:col-span-2' : ''
+                }`}
+              >
+                <X size={16} aria-hidden="true" /> Cancelar pedido
+              </button>
+            )}
+          </div>
         )}
       </li>
     );

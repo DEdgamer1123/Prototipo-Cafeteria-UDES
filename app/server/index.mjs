@@ -162,7 +162,7 @@ const TRANSICIONES = {
   pendiente_pago: ['recibido', 'cancelado'],
   recibido: ['preparando', 'cancelado'],
   preparando: ['listo', 'cancelado'],
-  listo: [],
+  listo: ['cancelado'],
   cancelado: [],
   expirado: [],
 };
