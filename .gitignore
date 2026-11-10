@@ -1,0 +1,59 @@
+# ============================================================
+# UDES Food — .gitignore raíz del monorepo
+# ============================================================
+
+# Dependencias
+node_modules/
+app/node_modules/
+.pnp
+.pnp.*
+
+# Builds y artefactos
+dist/
+app/dist/
+dist-ssr/
+app/dist-ssr/
+*.tsbuildinfo
+
+# Variables de entorno (NUNCA versionar secretos)
+.env
+.env.*
+!.env.example
+app/.env
+app/.env.*
+!app/.env.example
+
+# Evidencia de ejecución (pesada, volátil, no es código)
+.omo/evidence/
+
+# Logs y ruido local
+logs/
+*.log
+app/dev.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor y sistema operativo
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Cachés de herramientas
+.vercel/
+.netlify/
+.oxlintcache
+coverage/
+app/coverage/
+playwright-report/
+app/playwright-report/
+test-results/
+app/test-results/

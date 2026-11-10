@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300..900;1,300..900&display=swap');
+@import 'tailwindcss';
+
+/* ============================================================
+   DESIGN TOKENS — UDES Food
+   Fuente unica de verdad para color, tipografia, espaciado,
+   radios, sombras y duraciones.
+   ============================================================ */
+@theme {
+  /* Colores institucionales UDES */
+  --color-udes-blue: #004b9b;      /* Azul institucional — primario */
+  --color-udes-blue-dark: #003876; /* Azul oscuro — hover / texto */
+  --color-udes-blue-light: #e6eff9;/* Azul 10% — fondos suaves */
+  --color-udes-gold: #c89b73;      /* Dorado — SOLO decorativo (bordes, iconos) */
+  --color-udes-gold-dark: #8a6142; /* Dorado oscuro — texto (pasa contraste AA) */
+  --color-udes-gold-light: #f7efe7;/* Dorado 12% — fondos suaves */
+
+  /* Semanticos */
+  --color-success: #157f3d;
+  --color-success-light: #e5f5ea;
+  --color-warning: #b26a00;
+  --color-warning-light: #fff4e0;
+  --color-danger: #b02a37;
+  --color-danger-light: #fdecee;
+
+  /* Tipografia */
+  --font-sans: 'Montserrat', system-ui, sans-serif;
+
+  /* Radios */
+  --radius-card: 1rem;
+  --radius-pill: 999px;
+
+  /* Sombras */
+  --shadow-card: 0 2px 10px rgb(0 75 155 / 0.08);
+  --shadow-pop: 0 8px 30px rgb(0 75 155 / 0.16);
+
+  /* Duraciones */
+  --duration-fast: 150ms;
+  --duration-med: 300ms;
+}
+
+/* Skeleton shimmer */
+@keyframes shimmer {
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+.skeleton {
+  border-radius: var(--radius-card);
+  background: linear-gradient(90deg, #e9edf2 25%, #f5f7fa 50%, #e9edf2 75%);
+  background-size: 800px 100%;
+  animation: shimmer 1.4s infinite linear;
+}
+
+/* Focus visible accesible (WCAG) */
+*:focus-visible {
+  outline: 3px solid var(--color-udes-blue);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Respeta usuarios con movimiento reducido */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  font-family: var(--font-sans);
+  background: #f6f8fb;
+  color: #1a2332;
+}
