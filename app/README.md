@@ -9,25 +9,29 @@ Aplicación web (prototipo) para la cafetería de la **Universidad de Santander 
 ## ✨ Funcionalidades
 
 ### 👤 Panel de usuario (estudiantes)
+- **Selector de cafetería**: 3 cafeterías (nombres placeholder); una de ellas **no vende almuerzos** y su menú oculta los almuerzos automáticamente.
 - **Login** con correo institucional (simulado; cualquier correo válido entra).
-- **Menú por categorías**: Almuerzos, Desayunos, Bebidas y Snacks.
+- **Menú por categorías**: Almuerzos, Desayunos, Bebidas y **Snacks y tienda** (25 productos: paquetes, dulces, bebidas, sándwiches…).
 - **Carrito** con control de cantidades limitado por el **stock** disponible.
 - **Hora de recogida programada** (11:30 a.m. – 2:00 p.m. en intervalos de 15 min) — aparece solo si el carrito contiene un almuerzo (*progressive disclosure*).
-- **Pago simulado** (tarjeta / efectivo) con confirmación y **código de pedido** `UD-XXXX`.
-- **Mis pedidos** con estados: `Recibido → Preparando → ¡Listo para recoger!`.
+- **Bloqueo por cupo y por tiempo**: cada franja tiene cupo por cafetería; cuando se llena muestra **“Sin cupos”** y no se puede seleccionar. También se bloquea si la cola estimada no alcanza a prepararse antes del cierre (**“No alcanza a prepararse antes del cierre”**).
+- **Pago simulado con tarjeta** o **pago por transferencia con código QR**: el QR se genera con la referencia del pedido; el pedido queda en **“Pago pendiente”** hasta que la cafetería confirme la transferencia (permite adjuntar comprobante).
+- **Mis pedidos** con estados: `Pago pendiente → Recibido → Preparando → ¡Listo para recoger!` (más `Cancelado` y `Expirado`).
 - **Notificaciones** cuando el pedido está listo:
   - Toast dentro de la app (en cualquier pantalla y pestaña del navegador).
   - Notificación nativa del navegador (opcional, con permiso del usuario).
+- **Auto-agotado**: cuando el stock de un producto llega a 0, pasa automáticamente a **Agotado** y deja de ofrecerse.
 - **Aviso de bajo stock** ("Solo quedan X unidades") y productos agotados bloqueados.
 
 ### 🛠️ Panel de administración
 - Entrar con cualquier correo que empiece por `admin` (ej. `admin@udes.edu.co`).
-- **Cola de pedidos** con acciones: *Iniciar preparación* → *Marcar como listo y notificar*.
-- **Estadísticas del día**: pedidos, ingresos y pendientes.
+- **Cola de pedidos** filtrable por cafetería, con acciones: *Iniciar preparación* → *Marcar como listo y notificar*.
+- **Confirmación de transferencias**: los pedidos con pago por QR aparecen en *Pagos por verificar* con el comprobante adjunto y botones **Confirmar pago** / **Rechazar** (al rechazar se devuelve el stock).
+- **Estadísticas**: pedidos, ingresos, pendientes y pagos por verificar.
 - **Gestión del menú (CRUD)** en modal emergente:
-  - Crear/editar/eliminar productos (nombre, descripción, precio, categoría).
-  - **Stock manual** con descuento automático al realizar pedidos.
-  - Toggle Disponible / Agotado.
+  - Crear/editar/eliminar productos (nombre, descripción, precio, categoría y **cafetería**).
+  - **Stock manual** con descuento automático al realizar pedidos y **auto-agotado** al llegar a 0.
+  - Toggle Disponible / Agotado (no permite “Disponible” con stock 0).
   - Imagen por **URL** o **subir/tomar foto** (redimensionada automáticamente a máx. 600px).
 
 ---
@@ -126,8 +130,8 @@ app/
 ## 🗺️ Fase 2 (roadmap)
 
 - **SSO real con Microsoft Entra ID** (MSAL.js): el nombre completo y el código del estudiante llegarían del directorio institucional, sin formularios.
-- **Backend + base de datos** (menú, pedidos, usuarios, stock persistente).
-- **Pasarela de pago real** para Colombia (Wompi / Mercado Pago).
+- **Backend + base de datos** (menú, pedidos, usuarios, stock persistente). El repositorio ya incluye el esquema, las políticas RLS y las funciones preparadas para Supabase (`supabase/`), pero **no está conectado** todavía: primero se valida el prototipo con el usuario.
+- **Pasarela de pago real** para Colombia (Wompi / Mercado Pago). El pago por QR actual es informativo y la confirmación es manual por el admin.
 - **Notificaciones push / correo**.
 - Roles y permisos reales (cafetería, domicilios, reportes).
 

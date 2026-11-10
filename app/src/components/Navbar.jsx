@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { ShoppingCart, Bell, ReceiptText, UtensilsCrossed } from 'lucide-react';
+import { ShoppingCart, Bell, ReceiptText, UtensilsCrossed, Store } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import logoAlt from '../assets/logo-alt.png';
 
 export default function Navbar({ user, onLogout }) {
-  const { cartCount, showToast } = useStore();
+  const { cartCount, showToast, cafeteriaActual } = useStore();
   const navigate = useNavigate();
   const [notifPerm, setNotifPerm] = useState(
     typeof Notification !== 'undefined' ? Notification.permission : 'denied'
@@ -69,6 +69,16 @@ export default function Navbar({ user, onLogout }) {
             >
               <Bell size={16} aria-hidden="true" />
             </button>
+          )}
+          {cafeteriaActual && (
+            <Link
+              to="/cafeteria"
+              title="Cambiar cafetería"
+              className="hidden items-center gap-1.5 rounded-full border border-white/40 px-3 py-2 text-xs font-semibold text-white hover:bg-white/10 md:flex"
+            >
+              <Store size={14} aria-hidden="true" />
+              <span className="max-w-28 truncate">{cafeteriaActual.nombre}</span>
+            </Link>
           )}
           <button
             onClick={() => { onLogout(); navigate('/'); }}

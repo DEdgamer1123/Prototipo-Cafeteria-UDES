@@ -144,3 +144,15 @@ status: approved — plan escrito
 <!-- Siguiente acción: el usuario ejecuta el plan en una sesión aparte con `$ulw-execute udes-food-production`. No hay implementación en esta sesión. -->
 <!-- Artefactos: .omo/plans/udes-food-production.md (canónico, 39 todos + F1-F4), .omo/drafts/udes-food-production.md (memoria de decisiones), app/PLAN-PRODUCCION.md (copia legible dentro de la carpeta del proyecto). -->
 
+## Cambio de alcance — 2026-11-10 (vigente)
+
+El dueño decidió **posponer la conexión con Supabase, el login real y el despliegue en Vercel**:
+
+- Supabase: el código (esquema, RLS, RPC, handlers pendientes) **se mantiene en el repo** pero **no se conecta** todavía.
+- Login real: **no se puede** hasta conectar la base de datos de la universidad → se conserva el login simulado del prototipo.
+- Vercel: **no se despliega** por ahora.
+- El prototipo (localStorage) se amplió con: selector de **3 cafeterías** (nombres placeholder; una **no vende almuerzos**), **bloqueo de franjas por cupo lleno y por tiempo estimado**, **pago por transferencia con QR** (confirmación manual del admin) y **auto-agotado** cuando el stock llega a 0.
+- Catálogo ampliado a **25 productos** (paquetes, dulces, bebidas, sándwiches, combos).
+- Los todos 2–9 del plan quedaron ejecutados a nivel de código; la verificación en base de datos queda BLOCKED hasta que el dueño cree el proyecto Supabase.
+- Siguiente paso cuando el dueño lo decida: crear el proyecto Supabase, aplicar migraciones y migrar el prototipo al backend.
+

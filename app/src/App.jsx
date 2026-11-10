@@ -6,6 +6,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import OrderNotifier from './components/OrderNotifier';
 import Login from './pages/Login';
+import CafeteriaSelector from './pages/CafeteriaSelector';
 import Menu from './pages/Menu';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
@@ -43,6 +44,7 @@ export default function App() {
           <Route path="/" element={user ? <Navigate to={user.role === 'admin' ? '/admin' : '/menu'} /> : <Login onLogin={setUser} />} />
 
           <Route element={<RequireAuth><UserShell /></RequireAuth>}>
+            <Route path="/cafeteria" element={<CafeteriaSelector />} />
             <Route path="/menu" element={<Menu />} />
             <Route path="/carrito" element={<Cart />} />
             <Route path="/checkout" element={<Checkout user={user} />} />

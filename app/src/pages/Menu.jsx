@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { UtensilsCrossed, Egg, CupSoda, Cookie } from 'lucide-react';
+import { Navigate, Link } from 'react-router-dom';
+import { UtensilsCrossed, Egg, CupSoda, Cookie, Store } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { CATEGORIES } from '../data/menu';
 import ProductCard from '../components/ProductCard';
@@ -14,7 +15,7 @@ const CATEGORY_ICON = {
 };
 
 export default function Menu() {
-  const { products } = useStore();
+  const { productosVisibles, cafeteriaActual } = useStore();
   const [category, setCategory] = useState('almuerzos');
   const [loading, setLoading] = useState(true);
 
@@ -25,12 +26,33 @@ export default function Menu() {
     return () => clearTimeout(t);
   }, [category]);
 
-  const filtered = products.filter((p) => p.category === category);
+  // Sin cafetería elegida no se puede ver el menú
+  if (!cafeteriaActual) {
+    return <Navigate to="/cafeteria" replace />;
+  }
+
+  const filtered = productosVisibles.filter((p) => p.category === category);
 
   return (
     <main id="contenido" className="mx-auto max-w-6xl px-4 py-8">
-      <h1 className="text-2xl font-extrabold text-udes-blue">Menú de hoy</h1>
-      <p className="mb-6 text-sm text-slate-600">
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-extrabold text-udes-blue">Menú de hoy</h1>
+          <p className="mt-1 flex items-center gap-1.5 text-sm font-semibold text-slate-600">
+            <Store size={16} aria-hidden="true" className="text-udes-blue" />
+            {cafeteriaActual.nombre} · {cafeteriaActual.sede}
+            <Link to="/cafeteria" className="ml-2 text-xs font-bold text-udes-blue underline">
+              Cambiar
+            </Link>
+          </p>
+          {!cafeteriaActual.vendeAlmuerzos && (
+            <p className="mt-1 text-xs font-bold text-warning">
+              Esta cafetería no vende almuerzos: solo bebidas, desayunos y snacks.
+            </p>
+          )}
+        </div>
+      </div>
+      <p className="mb-6 mt-2 text-sm text-slate-600">
         Solo los <strong>almuerzos</strong> se pueden programar con hora de recogida
       </p>
 

@@ -1,4 +1,4 @@
-import { Clock } from 'lucide-react';
+import { Clock, Package } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { formatCOP } from '../data/menu';
 
@@ -10,7 +10,21 @@ export default function ProductCard({ product }) {
   return (
     <article className="flex flex-col overflow-hidden rounded-card bg-white shadow-card transition-shadow duration-med hover:shadow-pop">
       <div className="relative h-40 overflow-hidden sm:h-48">
-        <img src={product.image} alt={product.name} loading="lazy" className="h-full w-full object-cover" />
+        {product.image ? (
+          <img
+            src={product.image}
+            alt={product.name}
+            loading="lazy"
+            className="h-full w-full object-cover"
+          />
+        ) : (
+          <div
+            className="flex h-full w-full items-center justify-center bg-udes-blue-light text-udes-blue"
+            aria-hidden="true"
+          >
+            <Package size={48} />
+          </div>
+        )}
         {product.isLunch && (
           <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-udes-blue px-3 py-1 text-xs font-bold text-white">
             <Clock size={12} aria-hidden="true" />

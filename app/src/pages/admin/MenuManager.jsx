@@ -4,24 +4,28 @@ import { useStore } from '../../context/StoreContext';
 import { formatCOP, CATEGORIES } from '../../data/menu';
 import Modal from '../../components/Modal';
 
-const EMPTY = { name: '', description: '', price: '', stock: 10, category: 'almuerzos', image: '', available: true };
+const EMPTY = { name: '', description: '', price: '', stock: 10, category: 'almuerzos', cafeteriaId: '', image: '', available: true };
 
 // CRUD de productos (formulario minimo en modal — Ley de Hick)
 export default function MenuManager() {
-  const { products, saveProduct, deleteProduct, toggleAvailable, showToast } = useStore();
+  const { products, saveProduct, deleteProduct, toggleAvailable, showToast, cafeterias } = useStore();
   const [form, setForm] = useState(null); // null = modal cerrado
 
   const openNew = () => setForm({ ...EMPTY });
-  const openEdit = (p) => setForm({ ...p });
+  const openEdit = (p) => setForm({ ...EMPTY, ...p, cafeteriaId: p.cafeteriaId ?? '' });
 
   const submit = (e) => {
     e.preventDefault();
+    const stock = Math.max(0, Number(form.stock) || 0);
     const product = {
       ...form,
       price: Number(form.price),
-      stock: Math.max(0, Number(form.stock) || 0),
+      stock,
       isLunch: form.category === 'almuerzos',
-      image: form.image || `https://images.unsplash.com/photo-1547592180-85f173990554?w=600&q=70`,
+      cafeteriaId: form.cafeteriaId || null,
+      image: form.image || null,
+      // Auto-agotado: con stock 0 nunca queda "Disponible"
+      available: stock > 0 ? Boolean(form.available) : false,
     };
     saveProduct(product);
     showToast(form.id ? 'Producto actualizado' : 'Producto creado');
@@ -94,6 +98,15 @@ export default function MenuManager() {
                 </select>
               </div>
               <div className="sm:col-span-2">
+                <label htmlFor="f-caf" className="mb-1 block text-sm font-semibold">Cafetería</label>
+                <select id="f-caf" value={form.cafeteriaId ?? ''} onChange={(e) => setForm({ ...form, cafeteriaId: e.target.value })}
+                  className="w-full rounded-xl border border-slate-300 px-4 py-2.5">
+                  <option value="">Todas las cafeterías (catálogo base)</option>
+                  {cafeterias.map((c) => <option key={c.id} value={c.id}>{c.nombre}</option>)}
+                </select>
+                <p className="mt-1 text-xs text-slate-500">Si eliges una cafetería, el producto solo se muestra allí.</p>
+              </div>
+              <div className="sm:col-span-2">
                 <span className="mb-1 block text-sm font-semibold">Imagen del producto</span>
                 <div className="flex items-center gap-3">
                   {form.image && (
@@ -129,7 +142,8 @@ export default function MenuManager() {
               <div className="min-w-40 flex-1">
                 <p className="font-bold">{p.name}</p>
                 <p className="text-sm text-slate-500">
-                  {CATEGORIES.find((c) => c.id === p.category)?.label} · {formatCOP(p.price)}
+                  {CATEGORIES.find((c) => c.id === p.category)?.label} · {formatCOP(p.price)} ·{' '}
+                  {p.cafeteriaId ? (cafeterias.find((c) => c.id === p.cafeteriaId)?.nombre ?? 'Cafetería') : 'Todas'}
                 </p>
               </div>
               <span
