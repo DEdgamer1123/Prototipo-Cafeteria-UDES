@@ -59,11 +59,11 @@
       "stock": 16
     },
     {
-      "nombre": "Café Latte",
-      "precio": 4500,
+      "nombre": "Café",
+      "precio": 3500,
       "categoria": "bebidas",
       "es_almuerzo": false,
-      "stock": 30
+      "stock": 40
     },
     {
       "nombre": "Jugo Natural",
@@ -80,32 +80,25 @@
       "stock": 20
     },
     {
-      "nombre": "Agua sin Gas 600 ml",
-      "precio": 3000,
+      "nombre": "Agua",
+      "precio": 2000,
       "categoria": "bebidas",
       "es_almuerzo": false,
-      "stock": 40
+      "stock": 60
     },
     {
-      "nombre": "Jugo Hit 500 ml",
+      "nombre": "Jugo Hit",
       "precio": 3500,
       "categoria": "bebidas",
       "es_almuerzo": false,
       "stock": 36
     },
     {
-      "nombre": "Gaseosa Personal 400 ml",
+      "nombre": "Gaseosa Personal",
       "precio": 4000,
       "categoria": "bebidas",
       "es_almuerzo": false,
       "stock": 30
-    },
-    {
-      "nombre": "Café Americano",
-      "precio": 3500,
-      "categoria": "bebidas",
-      "es_almuerzo": false,
-      "stock": 35
     },
     {
       "nombre": "Bebida Energizante",
@@ -115,7 +108,7 @@
       "stock": 18
     },
     {
-      "nombre": "Empanada de Pollo",
+      "nombre": "Empanada",
       "precio": 3000,
       "categoria": "snacks",
       "es_almuerzo": false,
@@ -143,7 +136,7 @@
       "stock": 50
     },
     {
-      "nombre": "Chocolate Jet",
+      "nombre": "Chocolatina Jet",
       "precio": 2500,
       "categoria": "snacks",
       "es_almuerzo": false,
@@ -157,18 +150,11 @@
       "stock": 35
     },
     {
-      "nombre": "Obleas con Arequipe",
-      "precio": 2500,
+      "nombre": "Paquetes",
+      "precio": 2000,
       "categoria": "snacks",
       "es_almuerzo": false,
-      "stock": 25
-    },
-    {
-      "nombre": "Paquete Surtido",
-      "precio": 7500,
-      "categoria": "snacks",
-      "es_almuerzo": false,
-      "stock": 12
+      "stock": 60
     },
     {
       "nombre": "Almuerzo del día (mesa)",
@@ -179,7 +165,7 @@
     },
     {
       "nombre": "Almuerzo del día (para llevar)",
-      "precio": 13700,
+      "precio": 17700,
       "categoria": "almuerzos",
       "es_almuerzo": true,
       "stock": 15
@@ -199,14 +185,7 @@
       "stock": 12
     },
     {
-      "nombre": "Carne a la plancha con chimichurri",
-      "precio": 7500,
-      "categoria": "almuerzos",
-      "es_almuerzo": false,
-      "stock": 12
-    },
-    {
-      "nombre": "Lomitos de pollo apanados con miel naranjada",
+      "nombre": "Proteína",
       "precio": 7500,
       "categoria": "almuerzos",
       "es_almuerzo": false,
@@ -232,13 +211,6 @@
       "categoria": "almuerzos",
       "es_almuerzo": false,
       "stock": 15
-    },
-    {
-      "nombre": "Tajadas de maduro",
-      "precio": 5000,
-      "categoria": "almuerzos",
-      "es_almuerzo": false,
-      "stock": 18
     },
     {
       "nombre": "Jugo del día",

@@ -78,7 +78,12 @@ export default function Orders({ user }) {
               </p>
               <ul className="mt-2 list-none p-0 text-sm text-slate-700">
                 {o.items.map((i) => (
-                  <li key={i.id}>{i.qty} × {i.name}</li>
+                  <li key={i.lineId ?? i.id}>
+                    {i.qty} × {i.name}
+                    {i.optionsLabel && (
+                      <span className="text-slate-500"> · {i.optionsLabel}</span>
+                    )}
+                  </li>
                 ))}
               </ul>
               <div className="mt-3 flex flex-wrap items-center justify-between border-t pt-3 text-sm">

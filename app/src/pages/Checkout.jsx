@@ -235,8 +235,13 @@ export default function Checkout({ user }) {
         <h2 className="mb-3 font-bold">Resumen</h2>
         <ul className="space-y-1 p-0 text-sm text-slate-700">
           {cart.map((i) => (
-            <li key={i.id} className="flex justify-between">
-              <span>{i.qty} × {i.name}</span>
+            <li key={i.lineId ?? i.id} className="flex justify-between gap-2">
+              <span>
+                {i.qty} × {i.name}
+                {i.optionsLabel && (
+                  <span className="block text-xs text-slate-500">{i.optionsLabel}</span>
+                )}
+              </span>
               <span className="font-semibold">{formatCOP(i.price * i.qty)}</span>
             </li>
           ))}

@@ -59,29 +59,35 @@ export default function Cart() {
       </p>
 
       <ul className="space-y-3 p-0">
-        {cart.map((item) => (
-          <li key={item.id} className="flex items-center gap-3 rounded-card bg-white p-4 shadow-card sm:gap-4">
-            {item.image ? (
-              <img src={item.image} alt="" className="h-16 w-16 shrink-0 rounded-xl object-cover" />
-            ) : (
-              <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl bg-udes-blue-light text-udes-blue" aria-hidden="true">
-                <ShoppingCart size={22} />
+        {cart.map((item) => {
+          const lineId = item.lineId ?? String(item.id);
+          return (
+            <li key={lineId} className="flex items-center gap-3 rounded-card bg-white p-4 shadow-card sm:gap-4">
+              {item.image ? (
+                <img src={item.image} alt="" className="h-16 w-16 shrink-0 rounded-xl object-cover" />
+              ) : (
+                <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl bg-udes-blue-light text-udes-blue" aria-hidden="true">
+                  <ShoppingCart size={22} />
+                </div>
+              )}
+              <div className="min-w-0 flex-1">
+                <p className="truncate font-bold">{item.name}</p>
+                {item.optionsLabel && (
+                  <p className="text-xs font-semibold text-slate-500">{item.optionsLabel}</p>
+                )}
+                <p className="text-sm font-semibold text-udes-blue">{formatCOP(item.price)}</p>
               </div>
-            )}
-            <div className="min-w-0 flex-1">
-              <p className="truncate font-bold">{item.name}</p>
-              <p className="text-sm font-semibold text-udes-blue">{formatCOP(item.price)}</p>
-            </div>
-            <div className="flex items-center gap-1.5 sm:gap-2" aria-label={`Cantidad de ${item.name}`}>
-              <button onClick={() => setQty(item.id, item.qty - 1)} aria-label="Disminuir cantidad" className="flex h-10 w-10 items-center justify-center rounded-full bg-udes-blue-light text-lg font-bold text-udes-blue">−</button>
-              <span className="w-6 text-center font-bold" aria-live="polite">{item.qty}</span>
-              <button onClick={() => setQty(item.id, item.qty + 1)} aria-label="Aumentar cantidad" className="flex h-10 w-10 items-center justify-center rounded-full bg-udes-blue-light text-lg font-bold text-udes-blue">+</button>
-            </div>
-            <button onClick={() => removeFromCart(item.id)} aria-label={`Quitar ${item.name}`} className="flex shrink-0 items-center justify-center rounded-full p-3 text-danger hover:bg-danger-light">
-              <X size={18} aria-hidden="true" />
-            </button>
-          </li>
-        ))}
+              <div className="flex items-center gap-1.5 sm:gap-2" aria-label={`Cantidad de ${item.name}`}>
+                <button onClick={() => setQty(lineId, item.qty - 1)} aria-label="Disminuir cantidad" className="flex h-10 w-10 items-center justify-center rounded-full bg-udes-blue-light text-lg font-bold text-udes-blue">−</button>
+                <span className="w-6 text-center font-bold" aria-live="polite">{item.qty}</span>
+                <button onClick={() => setQty(lineId, item.qty + 1)} aria-label="Aumentar cantidad" className="flex h-10 w-10 items-center justify-center rounded-full bg-udes-blue-light text-lg font-bold text-udes-blue">+</button>
+              </div>
+              <button onClick={() => removeFromCart(lineId)} aria-label={`Quitar ${item.name}`} className="flex shrink-0 items-center justify-center rounded-full p-3 text-danger hover:bg-danger-light">
+                <X size={18} aria-hidden="true" />
+              </button>
+            </li>
+          );
+        })}
       </ul>
 
       {/* Progressive disclosure: solo aparece si hay almuerzo */}

@@ -6,9 +6,11 @@ import {
   MINUTOS_OTRO,
   PICKUP_SLOTS,
   cafeteriaPorId,
+  etiquetaOpciones,
+  precioConOpciones,
 } from '../data/menu';
 
-// Estado global del prototipo: cafetería seleccionada, menú (admin),
+// Estado global del prototipo: cafeterÃ­a seleccionada, menÃº (admin),
 // carrito y pedidos. Se sincroniza con localStorage para que el panel
 // usuario y el panel admin "conversen" dentro del mismo navegador (demo).
 
@@ -17,9 +19,9 @@ const LS_ORDERS = 'udesfood_orders';
 const LS_MENU = 'udesfood_menu';
 const LS_CAFETERIA = 'udesfood_cafeteria';
 const LS_MENU_VERSION = 'udesfood_menu_version';
-// Subir esta versión cuando cambie el catálogo base (fuerza un re-seed
-// en navegadores que ya habían cargado el prototipo).
-const MENU_VERSION = '4';
+// Subir esta versiÃ³n cuando cambie el catÃ¡logo base (fuerza un re-seed
+// en navegadores que ya habÃ­an cargado el prototipo).
+const MENU_VERSION = '7';
 
 function load(key, fallback) {
   try {
@@ -52,6 +54,13 @@ function minutosDeItems(items, cafeteria) {
   );
 }
 
+function claveSeleccion(seleccion) {
+  return Object.keys(seleccion ?? {})
+    .sort()
+    .map((k) => `${k}:${seleccion[k]}`)
+    .join('|');
+}
+
 function minutosHastaCierre(cafeteria, hora) {
   if (!cafeteria) return 0;
   const [h, m] = hora.split(':').map(Number);
@@ -60,8 +69,8 @@ function minutosHastaCierre(cafeteria, hora) {
 }
 
 export function StoreProvider({ children }) {
-  // Normaliza stock para menús antiguos guardados en localStorage (sin campo stock).
-  // Si cambió la versión del catálogo, re-siembra con el menú actual.
+  // Normaliza stock para menÃºs antiguos guardados en localStorage (sin campo stock).
+  // Si cambiÃ³ la versiÃ³n del catÃ¡logo, re-siembra con el menÃº actual.
   const [products, setProducts] = useState(() => {
     const normalize = (list) =>
       list.map((p) => ({
@@ -95,7 +104,7 @@ export function StoreProvider({ children }) {
     else localStorage.removeItem(LS_CAFETERIA);
   }, [cafeteriaId]);
 
-  // Sincroniza pestañas (usuario y admin abiertos a la vez)
+  // Sincroniza pestaÃ±as (usuario y admin abiertos a la vez)
   useEffect(() => {
     const onStorage = (e) => {
       if (e.key === LS_ORDERS && e.newValue) setOrders(JSON.parse(e.newValue));
@@ -113,13 +122,13 @@ export function StoreProvider({ children }) {
 
   const cafeteriaActual = useMemo(() => cafeteriaPorId(cafeteriaId), [cafeteriaId]);
 
-  // ---- Cafetería ----
+  // ---- CafeterÃ­a ----
   const setCafeteria = useCallback(
     (id) => {
       const caf = cafeteriaPorId(id);
       if (!caf) return;
 
-      // Si la cafetería no vende almuerzos/desayunos, no se puede llevar esos ítems.
+      // Si la cafeterÃ­a no vende almuerzos/desayunos, no se puede llevar esos Ã­tems.
       const incompatible = cart.some(
         (i) =>
           (i.category === 'almuerzos' && !caf.vendeAlmuerzos) ||
@@ -133,7 +142,7 @@ export function StoreProvider({ children }) {
               (i.category !== 'desayunos' || caf.vendeDesayunos)
           )
         );
-        showToast('Quitamos los productos que esa cafetería no vende', 'warning');
+        showToast('Quitamos los productos que esa cafeterÃ­a no vende', 'warning');
       }
 
       setCafeteriaId(id);
@@ -144,28 +153,53 @@ export function StoreProvider({ children }) {
   // ---- Carrito ----
   const stockOf = (id) => products.find((p) => p.id === id)?.stock ?? Infinity;
 
-  const addToCart = (product) => {
-    const inCart = cart.find((i) => i.id === product.id)?.qty ?? 0;
+  const addToCart = (product, seleccion = null) => {
     const disponible = product.stock ?? 0;
-    if (inCart >= disponible) {
+    const enCarrito = cart
+      .filter((i) => i.id === product.id)
+      .reduce((s, i) => s + i.qty, 0);
+
+    if (enCarrito >= disponible) {
       showToast(`Solo quedan ${disponible} unidades de ${product.name}`, 'warning');
       return;
     }
+
+    const sel = seleccion ?? {};
+    const lineId = product.options?.length
+      ? `${product.id}::${claveSeleccion(sel)}`
+      : String(product.id);
+    const price = precioConOpciones(product, sel);
+    const optionsLabel = etiquetaOpciones(product, sel);
+
     setCart((c) => {
-      const found = c.find((i) => i.id === product.id);
+      const found = c.find((i) => i.lineId === lineId);
       return found
-        ? c.map((i) => (i.id === product.id ? { ...i, qty: i.qty + 1 } : i))
-        : [...c, { ...product, qty: 1 }];
+        ? c.map((i) => (i.lineId === lineId ? { ...i, qty: i.qty + 1 } : i))
+        : [...c, { ...product, price, qty: 1, lineId, seleccion: sel, optionsLabel }];
     });
-    showToast(`${product.name} agregado al carrito`);
-  };
-  const removeFromCart = (id) => setCart((c) => c.filter((i) => i.id !== id));
-  const setQty = (id, qty) =>
-    setCart((c) =>
-      qty <= 0
-        ? c.filter((i) => i.id !== id)
-        : c.map((i) => (i.id === id ? { ...i, qty: Math.min(qty, stockOf(id)) } : i))
+
+    showToast(
+      optionsLabel
+        ? `${product.name} (${optionsLabel}) agregado al carrito`
+        : `${product.name} agregado al carrito`
     );
+  };
+
+  const removeFromCart = (lineId) => setCart((c) => c.filter((i) => i.lineId !== lineId));
+
+  const setQty = (lineId, qty) =>
+    setCart((c) => {
+      if (qty <= 0) return c.filter((i) => i.lineId !== lineId);
+      return c.map((i) => {
+        if (i.lineId !== lineId) return i;
+        const stock = stockOf(i.id);
+        const otras = c
+          .filter((x) => x.id === i.id && x.lineId !== lineId)
+          .reduce((s, x) => s + x.qty, 0);
+        const max = Math.max(0, stock - otras);
+        return { ...i, qty: Math.min(qty, max) };
+      });
+    });
   const clearCart = () => setCart([]);
 
   const cartTotal = useMemo(() => cart.reduce((s, i) => s + i.price * i.qty, 0), [cart]);
@@ -176,7 +210,7 @@ export function StoreProvider({ children }) {
     [cart, cafeteriaActual]
   );
 
-  // ---- Productos visibles para la cafetería seleccionada ----
+  // ---- Productos visibles para la cafeterÃ­a seleccionada ----
   const productosVisibles = useMemo(() => {
     if (!cafeteriaActual) return [];
     return products.filter((p) => {
@@ -187,7 +221,7 @@ export function StoreProvider({ children }) {
     });
   }, [products, cafeteriaActual]);
 
-  // ---- Estado de las franjas: cupo + estimación de tiempo ----
+  // ---- Estado de las franjas: cupo + estimaciÃ³n de tiempo ----
   const slotStatus = useCallback(
     (cafeteria) => {
       const caf = cafeteria ?? cafeteriaActual;
@@ -232,7 +266,7 @@ export function StoreProvider({ children }) {
   const placeOrder = ({ pickupTime, customer, paymentMethod = 'tarjeta', receipt = null }) => {
     if (!cafeteriaActual) return null;
     if (cartHasLunch && !cafeteriaActual.vendeAlmuerzos) {
-      showToast('Esa cafetería no vende almuerzos', 'warning');
+      showToast('Esa cafeterÃ­a no vende almuerzos', 'warning');
       return null;
     }
 
@@ -253,9 +287,11 @@ export function StoreProvider({ children }) {
     // Descuenta el stock y auto-marca "Agotado" al llegar a 0
     setProducts((list) =>
       list.map((p) => {
-        const item = cart.find((i) => i.id === p.id);
-        if (!item) return p;
-        const nextStock = Math.max(0, (p.stock ?? 0) - item.qty);
+        const cantidad = cart
+          .filter((i) => i.id === p.id)
+          .reduce((s, i) => s + i.qty, 0);
+        if (!cantidad) return p;
+        const nextStock = Math.max(0, (p.stock ?? 0) - cantidad);
         return {
           ...p,
           stock: nextStock,
@@ -283,9 +319,11 @@ export function StoreProvider({ children }) {
     if (order) {
       setProducts((list) =>
         list.map((p) => {
-          const item = order.items.find((i) => i.id === p.id);
-          if (!item) return p;
-          const nextStock = (p.stock ?? 0) + item.qty;
+          const cantidad = order.items
+            .filter((i) => i.id === p.id)
+            .reduce((s, i) => s + i.qty, 0);
+          if (!cantidad) return p;
+          const nextStock = (p.stock ?? 0) + cantidad;
           return { ...p, stock: nextStock, available: nextStock > 0 ? true : p.available };
         })
       );
@@ -359,3 +397,4 @@ export function StoreProvider({ children }) {
 }
 
 export const useStore = () => useContext(StoreContext);
+
