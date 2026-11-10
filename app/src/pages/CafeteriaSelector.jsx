@@ -46,11 +46,15 @@ export default function CafeteriaSelector() {
                 </div>
 
                 <h2 className="mt-3 text-lg font-extrabold text-udes-blue">{caf.nombre}</h2>
+                {caf.alias && (
+                  <p className="text-xs font-semibold text-slate-500">También conocida como {caf.alias}</p>
+                )}
                 {caf.sede && (
                   <p className="flex items-center gap-1 text-sm text-slate-600">
                     <MapPin size={14} aria-hidden="true" /> {caf.sede}
                   </p>
                 )}
+                {caf.nota && <p className="mt-1 text-xs text-slate-500">{caf.nota}</p>}
                 <p className="mt-1 flex items-center gap-1 text-sm text-slate-600">
                   <Clock size={14} aria-hidden="true" /> {caf.horarioApertura} – {caf.horarioCierre}
                 </p>

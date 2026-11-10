@@ -3,32 +3,32 @@
   "note": "Catálogo base del prototipo; debe coincidir con supabase/seed.sql. Imágenes locales en app/public/img/productos.",
   "productos": [
     {
-      "nombre": "Almuerzo Ejecutivo",
-      "precio": 12000,
-      "categoria": "almuerzos",
-      "es_almuerzo": true,
-      "stock": 15
-    },
-    {
-      "nombre": "Almuerzo Vegetariano",
-      "precio": 11000,
+      "nombre": "Costillas BBQ",
+      "precio": 15000,
       "categoria": "almuerzos",
       "es_almuerzo": true,
       "stock": 12
     },
     {
-      "nombre": "Pechuga a la Plancha",
+      "nombre": "Pechuga a la plancha",
       "precio": 14000,
       "categoria": "almuerzos",
       "es_almuerzo": true,
-      "stock": 10
+      "stock": 12
     },
     {
-      "nombre": "Combo Almuerzo + Bebida",
-      "precio": 15000,
+      "nombre": "Cerdo",
+      "precio": 14000,
       "categoria": "almuerzos",
       "es_almuerzo": true,
-      "stock": 10
+      "stock": 12
+    },
+    {
+      "nombre": "Alitas",
+      "precio": 13000,
+      "categoria": "almuerzos",
+      "es_almuerzo": true,
+      "stock": 12
     },
     {
       "nombre": "Calentado Paisa",
@@ -246,6 +246,20 @@
       "categoria": "bebidas",
       "es_almuerzo": false,
       "stock": 25
+    },
+    {
+      "nombre": "Lasaña",
+      "precio": 13000,
+      "categoria": "almuerzos",
+      "es_almuerzo": true,
+      "stock": 10
+    },
+    {
+      "nombre": "Salchipapa",
+      "precio": 10000,
+      "categoria": "almuerzos",
+      "es_almuerzo": true,
+      "stock": 15
     }
   ]
 }

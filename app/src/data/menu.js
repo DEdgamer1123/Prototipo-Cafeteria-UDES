@@ -15,26 +15,33 @@ export const CAFETERIAS = [
     vendeDesayunos: true,
     horarioApertura: '11:00',
     horarioCierre: '15:00',
-    cupoPorFranja: 20,
+    // Entrega confirmada: 2 minutos por almuerzo -> 7 por franja de 15 min
+    minutosPorAlmuerzo: 2,
+    cupoPorFranja: 7,
   },
   {
     id: 'caf-2',
     nombre: 'Cafetería Yariguíes',
     sede: '',
+    nota: 'Mismo dueño de Café U · Menú fijo semanal',
     vendeAlmuerzos: true,
     vendeDesayunos: false,
     horarioApertura: '11:00',
     horarioCierre: '15:00',
-    cupoPorFranja: 15,
+    // 20 minutos por 5 almuerzos -> 4 minutos por almuerzo -> 3 por franja
+    minutosPorAlmuerzo: 4,
+    cupoPorFranja: 3,
   },
   {
     id: 'caf-3',
     nombre: 'Cafetería de las Flores',
+    alias: 'Medicina',
     sede: '',
     vendeAlmuerzos: false,
     vendeDesayunos: false,
     horarioApertura: '11:00',
     horarioCierre: '14:30',
+    minutosPorAlmuerzo: null,
     cupoPorFranja: 12,
   },
 ];
@@ -49,10 +56,10 @@ export const CATEGORIES = [
 // cafeteriaId: null = disponible en todas las cafeterías activas.
 export const MENU = [
   // --- Almuerzos ---
-  { id: 1, name: 'Almuerzo Ejecutivo', description: 'Proteína del día, arroz, ensalada, sopa y jugo natural.', price: 12000, category: 'almuerzos', isLunch: true, available: true, stock: 15, cafeteriaId: 'caf-2', image: '/img/productos/almuerzo-ejecutivo.jpg' },
-  { id: 2, name: 'Almuerzo Vegetariano', description: 'Bowl de lentejas, quinoa, vegetales asados y jugo.', price: 11000, category: 'almuerzos', isLunch: true, available: true, stock: 12, cafeteriaId: 'caf-2', image: '/img/productos/almuerzo-vegetariano.jpg' },
-  { id: 3, name: 'Pechuga a la Plancha', description: 'Con puré de papa, ensalada fresca y limonada.', price: 14000, category: 'almuerzos', isLunch: true, available: true, stock: 10, cafeteriaId: 'caf-2', image: '/img/productos/pechuga-plancha.jpg' },
-  { id: 4, name: 'Combo Almuerzo + Bebida', description: 'Almuerzo ejecutivo con bebida de 400 ml a elección.', price: 15000, category: 'almuerzos', isLunch: true, available: true, stock: 10, cafeteriaId: 'caf-2', image: '/img/productos/combo-almuerzo.jpg' },
+  { id: 1, name: 'Costillas BBQ', description: 'Costillas BBQ con acompañante.', price: 15000, category: 'almuerzos', isLunch: true, available: true, stock: 12, cafeteriaId: 'caf-2', image: '/img/productos/costillas.jpg' },
+  { id: 2, name: 'Pechuga a la plancha', description: 'Pechuga a la plancha con acompañante.', price: 14000, category: 'almuerzos', isLunch: true, available: true, stock: 12, cafeteriaId: 'caf-2', image: '/img/productos/pechuga-plancha.jpg' },
+  { id: 3, name: 'Cerdo', description: 'Cerdo con acompañante.', price: 14000, category: 'almuerzos', isLunch: true, available: true, stock: 12, cafeteriaId: 'caf-2', image: '/img/productos/cerdo.jpg' },
+  { id: 4, name: 'Alitas', description: 'Alitas con acompañamiento.', price: 13000, category: 'almuerzos', isLunch: true, available: true, stock: 12, cafeteriaId: 'caf-2', image: '/img/productos/alitas.jpg' },
 
   // --- Desayunos ---
   { id: 5, name: 'Calentado Paisa', description: 'Frijoles, arroz, huevo, arepa y chocolate.', price: 8000, category: 'desayunos', isLunch: false, available: true, stock: 20, cafeteriaId: null, image: '/img/productos/calentado-paisa.jpg' },
@@ -91,6 +98,8 @@ export const MENU = [
   { id: 34, name: 'Ensalada de tomate y pepino', description: 'Rodajas de tomate y pepino.', price: 5000, category: 'almuerzos', isLunch: false, available: true, stock: 15, cafeteriaId: 'caf-1', image: '/img/productos/ensalada.jpg' },
   { id: 35, name: 'Tajadas de maduro', description: 'Tajadas de plátano maduro.', price: 5000, category: 'almuerzos', isLunch: false, available: true, stock: 18, cafeteriaId: 'caf-1', image: '/img/productos/tajadas-maduro.jpg' },
   { id: 36, name: 'Jugo del día', description: 'Jugo natural del día.', price: 1500, category: 'bebidas', isLunch: false, available: true, stock: 25, cafeteriaId: 'caf-1', image: '/img/productos/jugo-natural.jpg' },
+  { id: 37, name: 'Lasaña', description: 'Lasaña de la casa con acompañante.', price: 13000, category: 'almuerzos', isLunch: true, available: true, stock: 10, cafeteriaId: 'caf-2', image: '/img/productos/lasana.jpg' },
+  { id: 38, name: 'Salchipapa', description: 'Salchipapa con papas y salchicha.', price: 10000, category: 'almuerzos', isLunch: true, available: true, stock: 15, cafeteriaId: 'caf-2', image: '/img/productos/salchipapa.jpg' },
 ];
 
 // Franjas de recogida para almuerzos (Ley de Hick: opciones limitadas y claras)

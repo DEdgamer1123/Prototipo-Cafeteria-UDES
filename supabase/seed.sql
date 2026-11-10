@@ -1,6 +1,6 @@
 -- ============================================================
 -- UDES Food — seed reproducible del catálogo base
--- 35 productos del prototipo (app/src/data/menu.js).
+-- 37 productos del prototipo (app/src/data/menu.js).
 -- NO se siembran cafeterías: las crea el admin desde el panel
 -- con los nombres reales de la UDES (decisión del plan, todo 40).
 -- Las imágenes viven en app/public/img/productos y se migran a
@@ -10,10 +10,10 @@
 insert into public.productos
   (id, cafeteria_id, nombre, descripcion, precio, categoria, es_almuerzo, disponible, stock, stock_reservado, imagen_url)
 values
-  ('00000000-0000-4000-8000-000000000001', null, 'Almuerzo Ejecutivo', 'Proteína del día, arroz, ensalada, sopa y jugo natural.', 12000, 'almuerzos', true, true, 15, 0, null),
-  ('00000000-0000-4000-8000-000000000002', null, 'Almuerzo Vegetariano', 'Bowl de lentejas, quinoa, vegetales asados y jugo.', 11000, 'almuerzos', true, true, 12, 0, null),
-  ('00000000-0000-4000-8000-000000000003', null, 'Pechuga a la Plancha', 'Con puré de papa, ensalada fresca y limonada.', 14000, 'almuerzos', true, true, 10, 0, null),
-  ('00000000-0000-4000-8000-000000000004', null, 'Combo Almuerzo + Bebida', 'Almuerzo ejecutivo con bebida de 400 ml a elección.', 15000, 'almuerzos', true, true, 10, 0, null),
+  ('00000000-0000-4000-8000-000000000001', null, 'Costillas BBQ', 'Costillas BBQ con acompañante.', 15000, 'almuerzos', true, true, 12, 0, null),
+  ('00000000-0000-4000-8000-000000000002', null, 'Pechuga a la plancha', 'Pechuga a la plancha con acompañante.', 14000, 'almuerzos', true, true, 12, 0, null),
+  ('00000000-0000-4000-8000-000000000003', null, 'Cerdo', 'Cerdo con acompañante.', 14000, 'almuerzos', true, true, 12, 0, null),
+  ('00000000-0000-4000-8000-000000000004', null, 'Alitas', 'Alitas con acompañamiento.', 13000, 'almuerzos', true, true, 12, 0, null),
   ('00000000-0000-4000-8000-000000000005', null, 'Calentado Paisa', 'Frijoles, arroz, huevo, arepa y chocolate.', 8000, 'desayunos', false, true, 20, 0, null),
   ('00000000-0000-4000-8000-000000000006', null, 'Huevos Rancheros', 'Con arepa, queso y café americano.', 7500, 'desayunos', false, true, 18, 0, null),
   ('00000000-0000-4000-8000-000000000007', null, 'Sándwich de Pollo', 'Pan artesanal, pollo desmechado, lechuga y tomate.', 8500, 'desayunos', false, true, 14, 0, null),
@@ -44,7 +44,9 @@ values
   ('00000000-0000-4000-8000-000000000033', null, 'Arroz blanco', 'Porción de arroz blanco.', 3000, 'almuerzos', false, true, 25, 0, null),
   ('00000000-0000-4000-8000-000000000034', null, 'Ensalada de tomate y pepino', 'Rodajas de tomate y pepino.', 5000, 'almuerzos', false, true, 15, 0, null),
   ('00000000-0000-4000-8000-000000000035', null, 'Tajadas de maduro', 'Tajadas de plátano maduro.', 5000, 'almuerzos', false, true, 18, 0, null),
-  ('00000000-0000-4000-8000-000000000036', null, 'Jugo del día', 'Jugo natural del día.', 1500, 'bebidas', false, true, 25, 0, null)
+  ('00000000-0000-4000-8000-000000000036', null, 'Jugo del día', 'Jugo natural del día.', 1500, 'bebidas', false, true, 25, 0, null),
+  ('00000000-0000-4000-8000-000000000037', null, 'Lasaña', 'Lasaña de la casa con acompañante.', 13000, 'almuerzos', true, true, 10, 0, null),
+  ('00000000-0000-4000-8000-000000000038', null, 'Salchipapa', 'Salchipapa con papas y salchicha.', 10000, 'almuerzos', true, true, 15, 0, null)
 on conflict (id) do update set
   nombre = excluded.nombre,
   descripcion = excluded.descripcion,

@@ -9,8 +9,10 @@ Aplicación web (prototipo) para la cafetería de la **Universidad de Santander 
 ## ✨ Funcionalidades
 
 ### 👤 Panel de usuario (estudiantes)
-- **Selector de cafetería**: Cafetería de buses, Cafetería Yariguíes y Cafetería de las Flores. Los desayunos **solo se venden en la Cafetería de buses**; la de las Flores no vende almuerzos ni desayunos (solo bebidas y snacks).
+- **Selector de cafetería**: Cafetería de buses, Cafetería Yariguíes y Cafetería de las Flores (también conocida como **Medicina**). Los desayunos **solo se venden en la Cafetería de buses**; la de las Flores no vende almuerzos ni desayunos (solo bebidas y snacks).
 - **Menú del día de la Cafetería de buses** tomado del tablero: almuerzo del día (mesa $15.000 / para llevar $13.700), proteína + 1 acompañante (mesa $11.000 / para llevar $12.600) y porciones sueltas (sopa, arroz, ensalada, tajadas, carne, lomitos, jugo).
+- **Menú fijo semanal de Cafetería Yariguíes** (mismo dueño de Café U): costillas BBQ, pechuga a la plancha, cerdo, alitas, lasaña y salchipapa.
+- **Capacidad por franja según el lapso de entrega**: buses 2 min/almuerzo → **7 por franja**; Yariguíes 4 min/almuerzo (20 min por 5) → **3 por franja**. Al llenarse, la franja se bloquea con “Sin cupos”.
 - **Login** con correo institucional (simulado; cualquier correo válido entra).
 - **Menú por categorías**: Almuerzos, Desayunos, Bebidas y **Snacks y tienda** (24 productos: paquetes, dulces, bebidas, sándwiches…), todos con imagen local.
 - **Carrito** con control de cantidades limitado por el **stock** disponible.

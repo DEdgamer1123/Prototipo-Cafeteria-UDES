@@ -19,7 +19,7 @@ const LS_CAFETERIA = 'udesfood_cafeteria';
 const LS_MENU_VERSION = 'udesfood_menu_version';
 // Subir esta versión cuando cambie el catálogo base (fuerza un re-seed
 // en navegadores que ya habían cargado el prototipo).
-const MENU_VERSION = '3';
+const MENU_VERSION = '4';
 
 function load(key, fallback) {
   try {
@@ -44,9 +44,10 @@ function generarCodigo(existentes) {
   return `UD-${Date.now().toString(36).toUpperCase().slice(-6)}`;
 }
 
-function minutosDeItems(items) {
+function minutosDeItems(items, cafeteria) {
+  const porAlmuerzo = cafeteria?.minutosPorAlmuerzo ?? MINUTOS_ALMUERZO;
   return (items ?? []).reduce(
-    (total, item) => total + (item.isLunch ? MINUTOS_ALMUERZO : MINUTOS_OTRO) * (item.qty ?? 1),
+    (total, item) => total + (item.isLunch ? porAlmuerzo : MINUTOS_OTRO) * (item.qty ?? 1),
     0
   );
 }
@@ -170,7 +171,10 @@ export function StoreProvider({ children }) {
   const cartTotal = useMemo(() => cart.reduce((s, i) => s + i.price * i.qty, 0), [cart]);
   const cartCount = useMemo(() => cart.reduce((s, i) => s + i.qty, 0), [cart]);
   const cartHasLunch = useMemo(() => cart.some((i) => i.isLunch), [cart]);
-  const minutosCarrito = useMemo(() => minutosDeItems(cart), [cart]);
+  const minutosCarrito = useMemo(
+    () => minutosDeItems(cart, cafeteriaActual),
+    [cart, cafeteriaActual]
+  );
 
   // ---- Productos visibles para la cafetería seleccionada ----
   const productosVisibles = useMemo(() => {
@@ -197,11 +201,11 @@ export function StoreProvider({ children }) {
             ['pendiente_pago', 'recibido', 'preparando'].includes(o.status)
         );
 
-        const carga = activos.reduce((s, o) => s + minutosDeItems(o.items), 0);
+        const carga = activos.reduce((s, o) => s + minutosDeItems(o.items, caf), 0);
         const capacidad = minutosHastaCierre(caf, hora);
         const restante = Math.max(0, caf.cupoPorFranja - activos.length);
         const sinCupo = restante <= 0;
-        const tiempoEstimado = carga + minutosCarrito;
+        const tiempoEstimado = carga + minutosDeItems(cart, caf);
         const noAlcanza = tiempoEstimado > capacidad;
 
         let motivo = null;
@@ -221,7 +225,7 @@ export function StoreProvider({ children }) {
         };
       });
     },
-    [cafeteriaActual, orders, minutosCarrito]
+    [cafeteriaActual, orders, cart]
   );
 
   // ---- Pedidos ----
