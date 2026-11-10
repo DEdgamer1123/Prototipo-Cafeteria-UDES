@@ -31,8 +31,9 @@ export default function OrdersQueue() {
   };
 
   const pendientesPago = visible.filter((o) => o.status === 'pendiente_pago');
-  const pending = visible.filter((o) => o.status !== 'listo' && o.status !== 'pendiente_pago');
+  const pending = visible.filter((o) => ['recibido', 'preparando'].includes(o.status));
   const ready = visible.filter((o) => o.status === 'listo');
+  const cancelados = visible.filter((o) => ['cancelado', 'expirado'].includes(o.status));
   const revenue = visible.filter((o) => o.status !== 'cancelado').reduce((s, o) => s + o.total, 0);
 
   const stats = [
@@ -125,6 +126,7 @@ export default function OrdersQueue() {
           <h1 className="mb-1 text-2xl font-extrabold text-udes-blue">Cola de pedidos</h1>
           <p className="text-sm text-slate-600">
             {pending.length} pendientes · {ready.length} listos · {pendientesPago.length} pagos por verificar
+            {cancelados.length > 0 && ` · ${cancelados.length} cancelados`}
           </p>
         </div>
         <label className="flex items-center gap-2 text-sm font-semibold text-slate-600">
@@ -167,13 +169,24 @@ export default function OrdersQueue() {
             </>
           )}
 
-          <h2 className="mb-3 font-bold text-slate-700">Pendientes</h2>
-          <ul className="mb-8 space-y-4 p-0">{pending.map((o) => <OrderCard key={o.id} o={o} />)}</ul>
+          {pending.length > 0 && (
+            <>
+              <h2 className="mb-3 font-bold text-slate-700">Pendientes</h2>
+              <ul className="mb-8 space-y-4 p-0">{pending.map((o) => <OrderCard key={o.id} o={o} />)}</ul>
+            </>
+          )}
 
           {ready.length > 0 && (
             <>
               <h2 className="mb-3 font-bold text-slate-700">Listos para entrega</h2>
               <ul className="space-y-4 p-0">{ready.map((o) => <OrderCard key={o.id} o={o} />)}</ul>
+            </>
+          )}
+
+          {cancelados.length > 0 && (
+            <>
+              <h2 className="mb-3 mt-8 font-bold text-slate-500">Cancelados</h2>
+              <ul className="space-y-4 p-0 opacity-70">{cancelados.map((o) => <OrderCard key={o.id} o={o} />)}</ul>
             </>
           )}
         </>
