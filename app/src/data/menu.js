@@ -23,7 +23,6 @@ export const CAFETERIAS = [
     id: 'caf-2',
     nombre: 'Cafetería Yariguíes',
     sede: '',
-    nota: 'Mismo dueño de Café U · Menú fijo semanal',
     vendeAlmuerzos: true,
     vendeDesayunos: false,
     horarioApertura: '11:00',
@@ -35,7 +34,6 @@ export const CAFETERIAS = [
   {
     id: 'caf-3',
     nombre: 'Cafetería de las Flores',
-    alias: 'Medicina',
     sede: '',
     vendeAlmuerzos: false,
     vendeDesayunos: false,
