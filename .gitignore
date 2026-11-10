@@ -57,3 +57,6 @@ playwright-report/
 app/playwright-report/
 test-results/
 app/test-results/
+
+# Supabase CLI temp
+supabase/.temp/
