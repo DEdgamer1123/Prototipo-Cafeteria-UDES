@@ -22,7 +22,7 @@ export const CAFETERIAS = [
     nombre: 'Cafetería Yariguíes',
     sede: '',
     vendeAlmuerzos: true,
-    vendeDesayunos: true,
+    vendeDesayunos: false,
     horarioApertura: '11:00',
     horarioCierre: '15:00',
     cupoPorFranja: 15,
@@ -49,10 +49,10 @@ export const CATEGORIES = [
 // cafeteriaId: null = disponible en todas las cafeterías activas.
 export const MENU = [
   // --- Almuerzos ---
-  { id: 1, name: 'Almuerzo Ejecutivo', description: 'Proteína del día, arroz, ensalada, sopa y jugo natural.', price: 12000, category: 'almuerzos', isLunch: true, available: true, stock: 15, cafeteriaId: null, image: '/img/productos/almuerzo-ejecutivo.jpg' },
-  { id: 2, name: 'Almuerzo Vegetariano', description: 'Bowl de lentejas, quinoa, vegetales asados y jugo.', price: 11000, category: 'almuerzos', isLunch: true, available: true, stock: 12, cafeteriaId: null, image: '/img/productos/almuerzo-vegetariano.jpg' },
-  { id: 3, name: 'Pechuga a la Plancha', description: 'Con puré de papa, ensalada fresca y limonada.', price: 14000, category: 'almuerzos', isLunch: true, available: true, stock: 10, cafeteriaId: null, image: '/img/productos/pechuga-plancha.jpg' },
-  { id: 4, name: 'Combo Almuerzo + Bebida', description: 'Almuerzo ejecutivo con bebida de 400 ml a elección.', price: 15000, category: 'almuerzos', isLunch: true, available: true, stock: 10, cafeteriaId: null, image: '/img/productos/combo-almuerzo.jpg' },
+  { id: 1, name: 'Almuerzo Ejecutivo', description: 'Proteína del día, arroz, ensalada, sopa y jugo natural.', price: 12000, category: 'almuerzos', isLunch: true, available: true, stock: 15, cafeteriaId: 'caf-2', image: '/img/productos/almuerzo-ejecutivo.jpg' },
+  { id: 2, name: 'Almuerzo Vegetariano', description: 'Bowl de lentejas, quinoa, vegetales asados y jugo.', price: 11000, category: 'almuerzos', isLunch: true, available: true, stock: 12, cafeteriaId: 'caf-2', image: '/img/productos/almuerzo-vegetariano.jpg' },
+  { id: 3, name: 'Pechuga a la Plancha', description: 'Con puré de papa, ensalada fresca y limonada.', price: 14000, category: 'almuerzos', isLunch: true, available: true, stock: 10, cafeteriaId: 'caf-2', image: '/img/productos/pechuga-plancha.jpg' },
+  { id: 4, name: 'Combo Almuerzo + Bebida', description: 'Almuerzo ejecutivo con bebida de 400 ml a elección.', price: 15000, category: 'almuerzos', isLunch: true, available: true, stock: 10, cafeteriaId: 'caf-2', image: '/img/productos/combo-almuerzo.jpg' },
 
   // --- Desayunos ---
   { id: 5, name: 'Calentado Paisa', description: 'Frijoles, arroz, huevo, arepa y chocolate.', price: 8000, category: 'desayunos', isLunch: false, available: true, stock: 20, cafeteriaId: null, image: '/img/productos/calentado-paisa.jpg' },
@@ -79,6 +79,18 @@ export const MENU = [
   { id: 23, name: 'Maní Tostado', description: 'Bolsa personal de maní salado.', price: 2000, category: 'snacks', isLunch: false, available: true, stock: 35, cafeteriaId: null, image: '/img/productos/mani.jpg' },
   { id: 24, name: 'Obleas con Arequipe', description: 'Oblea artesanal con arequipe.', price: 2500, category: 'snacks', isLunch: false, available: true, stock: 25, cafeteriaId: null, image: '/img/productos/obleas.jpg' },
   { id: 25, name: 'Paquete Surtido', description: 'Selección de 3 snacks de tienda.', price: 7500, category: 'snacks', isLunch: false, available: true, stock: 12, cafeteriaId: null, image: '/img/productos/surtido.jpg' },
+  // --- Menú del día · Cafetería de buses (tablero) ---
+  { id: 26, name: 'Almuerzo del día (mesa)', description: 'Sopa de pastas, arroz blanco, garbanzos, tajadas de maduro, ensalada y proteína a elección.', price: 15000, category: 'almuerzos', isLunch: true, available: true, stock: 15, cafeteriaId: 'caf-1', image: '/img/productos/almuerzo-ejecutivo.jpg' },
+  { id: 27, name: 'Almuerzo del día (para llevar)', description: 'Sopa de pastas, arroz blanco, garbanzos, tajadas de maduro, ensalada y proteína a elección.', price: 13700, category: 'almuerzos', isLunch: true, available: true, stock: 15, cafeteriaId: 'caf-1', image: '/img/productos/almuerzo-ejecutivo.jpg' },
+  { id: 28, name: 'Proteína + 1 acompañante (mesa)', description: 'Carne a la plancha con chimichurri o lomitos de pollo apanados con miel naranjada + un acompañante.', price: 11000, category: 'almuerzos', isLunch: true, available: true, stock: 12, cafeteriaId: 'caf-1', image: '/img/productos/pechuga-plancha.jpg' },
+  { id: 29, name: 'Proteína + 1 acompañante (para llevar)', description: 'Carne a la plancha con chimichurri o lomitos de pollo apanados con miel naranjada + un acompañante.', price: 12600, category: 'almuerzos', isLunch: true, available: true, stock: 12, cafeteriaId: 'caf-1', image: '/img/productos/pechuga-plancha.jpg' },
+  { id: 30, name: 'Carne a la plancha con chimichurri', description: 'Porción de carne a la plancha con chimichurri.', price: 7500, category: 'almuerzos', isLunch: false, available: true, stock: 12, cafeteriaId: 'caf-1', image: '/img/productos/carne-plancha.jpg' },
+  { id: 31, name: 'Lomitos de pollo apanados con miel naranjada', description: 'Porción de lomitos de pollo apanados con miel naranjada.', price: 7500, category: 'almuerzos', isLunch: false, available: true, stock: 12, cafeteriaId: 'caf-1', image: '/img/productos/lomitos-pollo.jpg' },
+  { id: 32, name: 'Sopa de pastas', description: 'Porción de sopa de pastas del día.', price: 5000, category: 'almuerzos', isLunch: false, available: true, stock: 20, cafeteriaId: 'caf-1', image: '/img/productos/sopa-pastas.jpg' },
+  { id: 33, name: 'Arroz blanco', description: 'Porción de arroz blanco.', price: 3000, category: 'almuerzos', isLunch: false, available: true, stock: 25, cafeteriaId: 'caf-1', image: '/img/productos/arroz-blanco.jpg' },
+  { id: 34, name: 'Ensalada de tomate y pepino', description: 'Rodajas de tomate y pepino.', price: 5000, category: 'almuerzos', isLunch: false, available: true, stock: 15, cafeteriaId: 'caf-1', image: '/img/productos/ensalada.jpg' },
+  { id: 35, name: 'Tajadas de maduro', description: 'Tajadas de plátano maduro.', price: 5000, category: 'almuerzos', isLunch: false, available: true, stock: 18, cafeteriaId: 'caf-1', image: '/img/productos/tajadas-maduro.jpg' },
+  { id: 36, name: 'Jugo del día', description: 'Jugo natural del día.', price: 1500, category: 'bebidas', isLunch: false, available: true, stock: 25, cafeteriaId: 'caf-1', image: '/img/productos/jugo-natural.jpg' },
 ];
 
 // Franjas de recogida para almuerzos (Ley de Hick: opciones limitadas y claras)

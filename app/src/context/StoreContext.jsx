@@ -19,7 +19,7 @@ const LS_CAFETERIA = 'udesfood_cafeteria';
 const LS_MENU_VERSION = 'udesfood_menu_version';
 // Subir esta versión cuando cambie el catálogo base (fuerza un re-seed
 // en navegadores que ya habían cargado el prototipo).
-const MENU_VERSION = '2';
+const MENU_VERSION = '3';
 
 function load(key, fallback) {
   try {

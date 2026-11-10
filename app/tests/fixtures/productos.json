@@ -169,6 +169,83 @@
       "categoria": "snacks",
       "es_almuerzo": false,
       "stock": 12
+    },
+    {
+      "nombre": "Almuerzo del día (mesa)",
+      "precio": 15000,
+      "categoria": "almuerzos",
+      "es_almuerzo": true,
+      "stock": 15
+    },
+    {
+      "nombre": "Almuerzo del día (para llevar)",
+      "precio": 13700,
+      "categoria": "almuerzos",
+      "es_almuerzo": true,
+      "stock": 15
+    },
+    {
+      "nombre": "Proteína + 1 acompañante (mesa)",
+      "precio": 11000,
+      "categoria": "almuerzos",
+      "es_almuerzo": true,
+      "stock": 12
+    },
+    {
+      "nombre": "Proteína + 1 acompañante (para llevar)",
+      "precio": 12600,
+      "categoria": "almuerzos",
+      "es_almuerzo": true,
+      "stock": 12
+    },
+    {
+      "nombre": "Carne a la plancha con chimichurri",
+      "precio": 7500,
+      "categoria": "almuerzos",
+      "es_almuerzo": false,
+      "stock": 12
+    },
+    {
+      "nombre": "Lomitos de pollo apanados con miel naranjada",
+      "precio": 7500,
+      "categoria": "almuerzos",
+      "es_almuerzo": false,
+      "stock": 12
+    },
+    {
+      "nombre": "Sopa de pastas",
+      "precio": 5000,
+      "categoria": "almuerzos",
+      "es_almuerzo": false,
+      "stock": 20
+    },
+    {
+      "nombre": "Arroz blanco",
+      "precio": 3000,
+      "categoria": "almuerzos",
+      "es_almuerzo": false,
+      "stock": 25
+    },
+    {
+      "nombre": "Ensalada de tomate y pepino",
+      "precio": 5000,
+      "categoria": "almuerzos",
+      "es_almuerzo": false,
+      "stock": 15
+    },
+    {
+      "nombre": "Tajadas de maduro",
+      "precio": 5000,
+      "categoria": "almuerzos",
+      "es_almuerzo": false,
+      "stock": 18
+    },
+    {
+      "nombre": "Jugo del día",
+      "precio": 1500,
+      "categoria": "bebidas",
+      "es_almuerzo": false,
+      "stock": 25
     }
   ]
 }
