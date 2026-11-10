@@ -1,0 +1,72 @@
+# ============================================================
+# UDES Food — configuración de Supabase CLI
+# `supabase start` requiere Docker Desktop (no instalado en este equipo).
+# Sin Docker se trabaja contra el proyecto hospedado con `supabase link`.
+# ============================================================
+
+project_id = "udes-food"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "storage", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[db]
+port = 54322
+shadow_port = 54320
+major_version = 17
+
+[db.seed]
+enabled = true
+sql_paths = ["./seed.sql"]
+
+[db.pooler]
+enabled = false
+
+[studio]
+enabled = true
+port = 54323
+
+[inbucket]
+enabled = true
+port = 54324
+
+[storage]
+enabled = true
+file_size_limit = "2MiB"
+
+[auth]
+enabled = true
+site_url = "http://localhost:5173"
+additional_redirect_urls = [
+  "http://localhost:5173/auth/confirmar",
+  "http://localhost:5173/auth/recuperar",
+  "http://localhost:5173/checkout/retorno"
+]
+jwt_expiry = 3600
+enable_signup = true
+
+[auth.email]
+enable_signup = true
+double_confirm_changes = true
+enable_confirmations = true
+
+[auth.email.template.confirmation]
+subject = "Confirma tu correo — UDES Food"
+
+[auth.email.template.recovery]
+subject = "Restablece tu contraseña — UDES Food"
+
+[functions.wompi-webhook]
+verify_jwt = false
+
+[functions.crear-transaccion]
+verify_jwt = true
+
+[functions.keepalive]
+verify_jwt = false
+
+[functions.order-ready-email]
+verify_jwt = true

@@ -1,0 +1,26 @@
+{
+  "_note": "Evento de webhook Wompi SANDBOX saneado. El algoritmo de firma/checksum debe verificarse contra https://docs.wompi.co/en/docs/colombia/eventos/ al implementar el todo 21; si no hay firma verificable en sandbox, el fallback documentado es secreto events_ + allow-list de campos (ver docs/SEGURIDAD-WEBHOOK.md).",
+  "event": "transaction.updated",
+  "data": {
+    "transaction": {
+      "id": "test-txn-00000000",
+      "status": "APPROVED",
+      "reference": "UD-ABC234",
+      "amount_in_cents": 1200000,
+      "currency": "COP",
+      "payment_method_type": "CARD",
+      "created_at": "2026-11-10T15:04:05.000Z",
+      "finalized_at": "2026-11-10T15:04:30.000Z"
+    }
+  },
+  "sent_at": "2026-11-10T15:04:31.000Z",
+  "timestamp": 1762787071,
+  "signature": {
+    "properties": ["transaction.id", "transaction.status", "transaction.amount_in_cents"],
+    "checksum": "SANITIZED-EXAMPLE-CHECKSUM"
+  },
+  "_expected": {
+    "replay": "3 POST idénticos => 1 transición de estado y 1 decremento de stock",
+    "tamper": "checksum alterado => 4xx y 0 cambios de estado"
+  }
+}

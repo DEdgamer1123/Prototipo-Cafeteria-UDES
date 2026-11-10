@@ -1,0 +1,29 @@
+{
+  "_note": "Payload de referencia del checkout Wompi SANDBOX, saneado. Sin llaves, sin datos personales reales. Verificar el formato exacto contra https://docs.wompi.co/en/docs/colombia/transacciones/ antes de implementar.",
+  "request": {
+    "amount_in_cents": 1200000,
+    "currency": "COP",
+    "customer_email": "estudiante@udes.edu.co",
+    "reference": "UD-ABC234",
+    "payment_method": {
+      "type": "CARD",
+      "installments": 1
+    },
+    "redirect_url": "https://app.example.com/checkout/retorno"
+  },
+  "response_sandbox": {
+    "data": {
+      "id": "test-txn-00000000",
+      "status": "PENDING",
+      "reference": "UD-ABC234",
+      "amount_in_cents": 1200000,
+      "currency": "COP",
+      "payment_method_type": "CARD"
+    }
+  },
+  "_expected": {
+    "monto_cop": 12000,
+    "monto_centavos": 1200000,
+    "regla": "amount_in_cents = precio_cop * 100; se calcula una sola vez en el módulo money"
+  }
+}
