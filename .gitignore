@@ -60,3 +60,6 @@ app/test-results/
 
 # Supabase CLI temp
 supabase/.temp/
+
+# Datos de la demo compartida (pedidos/stock locales)
+app/server/data/

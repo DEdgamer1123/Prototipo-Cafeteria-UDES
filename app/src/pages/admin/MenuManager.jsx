@@ -14,7 +14,7 @@ export default function MenuManager() {
   const openNew = () => setForm({ ...EMPTY });
   const openEdit = (p) => setForm({ ...EMPTY, ...p, cafeteriaId: p.cafeteriaId ?? '' });
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault();
     const stock = Math.max(0, Number(form.stock) || 0);
     const product = {
@@ -27,9 +27,11 @@ export default function MenuManager() {
       // Auto-agotado: con stock 0 nunca queda "Disponible"
       available: stock > 0 ? Boolean(form.available) : false,
     };
-    saveProduct(product);
-    showToast(form.id ? 'Producto actualizado' : 'Producto creado');
-    setForm(null);
+    const ok = await saveProduct(product);
+    if (ok) {
+      showToast(form.id ? 'Producto actualizado' : 'Producto creado');
+      setForm(null);
+    }
   };
 
   // Sube o toma una foto: se redimensiona (max 600px) y se guarda en

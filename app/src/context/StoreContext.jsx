@@ -10,18 +10,26 @@ import {
   precioConOpciones,
 } from '../data/menu';
 
-// Estado global del prototipo: cafeterÃ­a seleccionada, menÃº (admin),
-// carrito y pedidos. Se sincroniza con localStorage para que el panel
-// usuario y el panel admin "conversen" dentro del mismo navegador (demo).
+// Estado global de la demo:
+// - Menú, pedidos y stock viven en el servidor local (api /api) para que
+//   todos los dispositivos conectados por el túnel vean lo mismo.
+// - Cafetería seleccionada y carrito son locales de cada navegador.
 
 const StoreContext = createContext(null);
-const LS_ORDERS = 'udesfood_orders';
-const LS_MENU = 'udesfood_menu';
 const LS_CAFETERIA = 'udesfood_cafeteria';
-const LS_MENU_VERSION = 'udesfood_menu_version';
-// Subir esta versiÃ³n cuando cambie el catÃ¡logo base (fuerza un re-seed
-// en navegadores que ya habÃ­an cargado el prototipo).
-const MENU_VERSION = '8';
+const API = '/api';
+
+async function apiFetch(path, options = {}) {
+  const res = await fetch(`${API}${path}`, {
+    headers: { 'content-type': 'application/json' },
+    ...options,
+  });
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    throw new Error(data.error || `Error ${res.status}`);
+  }
+  return res.json();
+}
 
 function load(key, fallback) {
   try {
@@ -32,18 +40,11 @@ function load(key, fallback) {
   }
 }
 
-const ALFABETO = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-
-function generarCodigo(existentes) {
-  for (let intento = 0; intento < 10; intento++) {
-    let sufijo = '';
-    for (let i = 0; i < 6; i++) {
-      sufijo += ALFABETO[Math.floor(Math.random() * ALFABETO.length)];
-    }
-    const id = `UD-${sufijo}`;
-    if (!existentes.some((o) => o.id === id)) return id;
-  }
-  return `UD-${Date.now().toString(36).toUpperCase().slice(-6)}`;
+function claveSeleccion(seleccion) {
+  return Object.keys(seleccion ?? {})
+    .sort()
+    .map((k) => `${k}:${seleccion[k]}`)
+    .join('|');
 }
 
 function minutosDeItems(items, cafeteria) {
@@ -54,13 +55,6 @@ function minutosDeItems(items, cafeteria) {
   );
 }
 
-function claveSeleccion(seleccion) {
-  return Object.keys(seleccion ?? {})
-    .sort()
-    .map((k) => `${k}:${seleccion[k]}`)
-    .join('|');
-}
-
 function minutosHastaCierre(cafeteria, hora) {
   if (!cafeteria) return 0;
   const [h, m] = hora.split(':').map(Number);
@@ -69,66 +63,79 @@ function minutosHastaCierre(cafeteria, hora) {
 }
 
 export function StoreProvider({ children }) {
-  // Normaliza stock para menÃºs antiguos guardados en localStorage (sin campo stock).
-  // Si cambiÃ³ la versiÃ³n del catÃ¡logo, re-siembra con el menÃº actual.
-  const [products, setProducts] = useState(() => {
-    const normalize = (list) =>
-      list.map((p) => ({
-        stock: 10,
-        available: true,
-        cafeteriaId: null,
-        image: null,
-        ...p,
-      }));
-
-    try {
-      if (localStorage.getItem(LS_MENU_VERSION) !== MENU_VERSION) {
-        localStorage.setItem(LS_MENU_VERSION, MENU_VERSION);
-        return normalize(MENU);
-      }
-    } catch {
-      /* localStorage no disponible */
-    }
-
-    return normalize(load(LS_MENU, MENU));
-  });
+  const [products, setProducts] = useState(MENU);
+  const [orders, setOrders] = useState([]);
   const [cart, setCart] = useState([]);
-  const [orders, setOrders] = useState(() => load(LS_ORDERS, []));
   const [cafeteriaId, setCafeteriaId] = useState(() => load(LS_CAFETERIA, null));
   const [toast, setToast] = useState(null);
-
-  useEffect(() => localStorage.setItem(LS_ORDERS, JSON.stringify(orders)), [orders]);
-  useEffect(() => localStorage.setItem(LS_MENU, JSON.stringify(products)), [products]);
-  useEffect(() => {
-    if (cafeteriaId) localStorage.setItem(LS_CAFETERIA, JSON.stringify(cafeteriaId));
-    else localStorage.removeItem(LS_CAFETERIA);
-  }, [cafeteriaId]);
-
-  // Sincroniza pestaÃ±as (usuario y admin abiertos a la vez)
-  useEffect(() => {
-    const onStorage = (e) => {
-      if (e.key === LS_ORDERS && e.newValue) setOrders(JSON.parse(e.newValue));
-      if (e.key === LS_MENU && e.newValue) setProducts(JSON.parse(e.newValue));
-      if (e.key === LS_CAFETERIA) setCafeteriaId(e.newValue ? JSON.parse(e.newValue) : null);
-    };
-    window.addEventListener('storage', onStorage);
-    return () => window.removeEventListener('storage', onStorage);
-  }, []);
+  const [apiOnline, setApiOnline] = useState(true);
 
   const showToast = useCallback((message, type = 'success') => {
     setToast({ message, type, id: Date.now() });
     setTimeout(() => setToast(null), 3500);
   }, []);
 
+  const refresh = useCallback(async () => {
+    const data = await apiFetch('/state');
+    if (Array.isArray(data.products)) setProducts(data.products);
+    if (Array.isArray(data.orders)) setOrders(data.orders);
+    setApiOnline(true);
+  }, []);
+
+  // Arranque: siembra el catálogo una vez y sincroniza cada 2.5 s
+  useEffect(() => {
+    let activo = true;
+
+    const init = async () => {
+      try {
+        await apiFetch('/seed', {
+          method: 'POST',
+          body: JSON.stringify({ products: MENU }),
+        });
+        if (activo) await refresh();
+      } catch {
+        if (!activo) return;
+        setApiOnline(false);
+        showToast(
+          'Servidor de demo no disponible. Inicia la app con "npm run dev".',
+          'warning'
+        );
+      }
+    };
+
+    init();
+    const timer = setInterval(() => {
+      refresh().catch(() => setApiOnline(false));
+    }, 2500);
+
+    return () => {
+      activo = false;
+      clearInterval(timer);
+    };
+  }, [refresh, showToast]);
+
+  useEffect(() => {
+    if (cafeteriaId) localStorage.setItem(LS_CAFETERIA, JSON.stringify(cafeteriaId));
+    else localStorage.removeItem(LS_CAFETERIA);
+  }, [cafeteriaId]);
+
+  // Sincroniza la cafetería entre pestañas del mismo navegador
+  useEffect(() => {
+    const onStorage = (e) => {
+      if (e.key === LS_CAFETERIA) setCafeteriaId(e.newValue ? JSON.parse(e.newValue) : null);
+    };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, []);
+
   const cafeteriaActual = useMemo(() => cafeteriaPorId(cafeteriaId), [cafeteriaId]);
 
-  // ---- CafeterÃ­a ----
+  // ---- Cafetería ----
   const setCafeteria = useCallback(
     (id) => {
       const caf = cafeteriaPorId(id);
       if (!caf) return;
 
-      // Si la cafeterÃ­a no vende almuerzos/desayunos, no se puede llevar esos Ã­tems.
       const incompatible = cart.some(
         (i) =>
           (i.category === 'almuerzos' && !caf.vendeAlmuerzos) ||
@@ -142,7 +149,7 @@ export function StoreProvider({ children }) {
               (i.category !== 'desayunos' || caf.vendeDesayunos)
           )
         );
-        showToast('Quitamos los productos que esa cafeterÃ­a no vende', 'warning');
+        showToast('Quitamos los productos que esa cafetería no vende', 'warning');
       }
 
       setCafeteriaId(id);
@@ -150,7 +157,7 @@ export function StoreProvider({ children }) {
     [cart, showToast]
   );
 
-  // ---- Carrito ----
+  // ---- Carrito (local) ----
   const stockOf = (id) => products.find((p) => p.id === id)?.stock ?? Infinity;
 
   const addToCart = (product, seleccion = null) => {
@@ -200,6 +207,7 @@ export function StoreProvider({ children }) {
         return { ...i, qty: Math.min(qty, max) };
       });
     });
+
   const clearCart = () => setCart([]);
 
   const cartTotal = useMemo(() => cart.reduce((s, i) => s + i.price * i.qty, 0), [cart]);
@@ -210,7 +218,7 @@ export function StoreProvider({ children }) {
     [cart, cafeteriaActual]
   );
 
-  // ---- Productos visibles para la cafeterÃ­a seleccionada ----
+  // ---- Productos visibles ----
   const productosVisibles = useMemo(() => {
     if (!cafeteriaActual) return [];
     return products.filter((p) => {
@@ -221,7 +229,7 @@ export function StoreProvider({ children }) {
     });
   }, [products, cafeteriaActual]);
 
-  // ---- Estado de las franjas: cupo + estimaciÃ³n de tiempo ----
+  // ---- Franjas ----
   const slotStatus = useCallback(
     (cafeteria) => {
       const caf = cafeteria ?? cafeteriaActual;
@@ -262,106 +270,99 @@ export function StoreProvider({ children }) {
     [cafeteriaActual, orders, cart]
   );
 
-  // ---- Pedidos ----
-  const placeOrder = ({ pickupTime, customer, paymentMethod = 'tarjeta', receipt = null }) => {
+  // ---- Pedidos (servidor) ----
+  const placeOrder = async ({ pickupTime, customer, paymentMethod = 'tarjeta', receipt = null }) => {
     if (!cafeteriaActual) return null;
-    if (cartHasLunch && !cafeteriaActual.vendeAlmuerzos) {
-      showToast('Esa cafeterÃ­a no vende almuerzos', 'warning');
+
+    try {
+      const order = await apiFetch('/orders', {
+        method: 'POST',
+        body: JSON.stringify({
+          items: cart.map((i) => ({ id: i.id, qty: i.qty, seleccion: i.seleccion ?? {} })),
+          cafeteriaId: cafeteriaActual.id,
+          cafeteriaNombre: cafeteriaActual.nombre,
+          customer,
+          pickupTime,
+          paymentMethod,
+          receipt,
+        }),
+      });
+      await refresh();
+      return order;
+    } catch (e) {
+      showToast(e.message || 'No se pudo crear el pedido', 'warning');
       return null;
     }
-
-    const order = {
-      id: generarCodigo(orders),
-      items: cart,
-      total: cartTotal,
-      pickupTime, // null si no hay almuerzo
-      customer,
-      cafeteriaId: cafeteriaActual.id,
-      cafeteriaNombre: cafeteriaActual.nombre,
-      paymentMethod, // 'tarjeta' | 'transferencia'
-      receipt, // dataURL del comprobante (solo transferencia)
-      status: paymentMethod === 'transferencia' ? 'pendiente_pago' : 'recibido',
-      createdAt: new Date().toISOString(),
-    };
-
-    // Descuenta el stock y auto-marca "Agotado" al llegar a 0
-    setProducts((list) =>
-      list.map((p) => {
-        const cantidad = cart
-          .filter((i) => i.id === p.id)
-          .reduce((s, i) => s + i.qty, 0);
-        if (!cantidad) return p;
-        const nextStock = Math.max(0, (p.stock ?? 0) - cantidad);
-        return {
-          ...p,
-          stock: nextStock,
-          available: nextStock > 0 ? p.available : false,
-        };
-      })
-    );
-    setOrders((o) => [order, ...o]);
-    clearCart();
-    return order;
   };
 
-  const setOrderStatus = (id, status) => {
-    setOrders((o) => o.map((ord) => (ord.id === id ? { ...ord, status } : ord)));
-  };
-
-  // El admin confirma una transferencia: el pedido entra a la cola.
-  const confirmTransfer = (id) => {
-    setOrders((o) => o.map((ord) => (ord.id === id ? { ...ord, status: 'recibido' } : ord)));
-  };
-
-  // El admin rechaza una transferencia: se devuelve el stock.
-  const rejectTransfer = (id) => {
-    const order = orders.find((o) => o.id === id);
-    if (order) {
-      setProducts((list) =>
-        list.map((p) => {
-          const cantidad = order.items
-            .filter((i) => i.id === p.id)
-            .reduce((s, i) => s + i.qty, 0);
-          if (!cantidad) return p;
-          const nextStock = (p.stock ?? 0) + cantidad;
-          return { ...p, stock: nextStock, available: nextStock > 0 ? true : p.available };
-        })
-      );
+  const patchOrder = async (id, patch) => {
+    try {
+      await apiFetch(`/orders/${encodeURIComponent(id)}`, {
+        method: 'PATCH',
+        body: JSON.stringify(patch),
+      });
+      await refresh();
+      return true;
+    } catch (e) {
+      showToast(e.message || 'No se pudo actualizar el pedido', 'warning');
+      return false;
     }
-    setOrders((o) => o.map((ord) => (ord.id === id ? { ...ord, status: 'cancelado' } : ord)));
   };
 
-  // Adjunta o reemplaza el comprobante de una transferencia.
-  const attachReceipt = (id, receipt) => {
-    setOrders((o) => o.map((ord) => (ord.id === id ? { ...ord, receipt } : ord)));
+  const setOrderStatus = (id, status) => patchOrder(id, { status });
+  const confirmTransfer = (id) => patchOrder(id, { status: 'recibido' });
+  const rejectTransfer = (id) => patchOrder(id, { status: 'cancelado' });
+  const attachReceipt = (id, receipt) => patchOrder(id, { receipt });
+
+  // ---- Admin: productos (servidor) ----
+  const saveProduct = async (p) => {
+    try {
+      if (p.id) {
+        await apiFetch(`/products/${encodeURIComponent(p.id)}`, {
+          method: 'PATCH',
+          body: JSON.stringify(p),
+        });
+      } else {
+        await apiFetch('/products', {
+          method: 'POST',
+          body: JSON.stringify(p),
+        });
+      }
+      await refresh();
+      return true;
+    } catch (e) {
+      showToast(e.message || 'No se pudo guardar el producto', 'warning');
+      return false;
+    }
   };
 
-  // ---- Admin: productos ----
-  const saveProduct = (p) => {
-    const stock = Math.max(0, Number(p.stock) || 0);
-    const normalized = {
-      ...p,
-      stock,
-      // Auto-agotado: nunca queda "Disponible" con stock 0
-      available: stock > 0 ? Boolean(p.available) : false,
-    };
-    setProducts((list) =>
-      p.id
-        ? list.map((it) => (it.id === p.id ? normalized : it))
-        : [...list, { ...normalized, id: Date.now() }]
-    );
+  const deleteProduct = async (id) => {
+    try {
+      await apiFetch(`/products/${encodeURIComponent(id)}`, { method: 'DELETE' });
+      await refresh();
+      return true;
+    } catch (e) {
+      showToast(e.message || 'No se pudo eliminar el producto', 'warning');
+      return false;
+    }
   };
-  const deleteProduct = (id) => setProducts((list) => list.filter((p) => p.id !== id));
-  const toggleAvailable = (id) => {
+
+  const toggleAvailable = async (id) => {
     const p = products.find((x) => x.id === id);
     if (!p) return;
     if (!p.available && (p.stock ?? 0) <= 0) {
       showToast('No puedes marcarlo disponible: no hay stock', 'warning');
       return;
     }
-    setProducts((list) =>
-      list.map((item) => (item.id === id ? { ...item, available: !item.available } : item))
-    );
+    try {
+      await apiFetch(`/products/${encodeURIComponent(id)}`, {
+        method: 'PATCH',
+        body: JSON.stringify({ available: !p.available }),
+      });
+      await refresh();
+    } catch (e) {
+      showToast(e.message || 'No se pudo actualizar el producto', 'warning');
+    }
   };
 
   const value = {
@@ -374,6 +375,7 @@ export function StoreProvider({ children }) {
     cart,
     orders,
     toast,
+    apiOnline,
     showToast,
     addToCart,
     removeFromCart,
@@ -393,8 +395,8 @@ export function StoreProvider({ children }) {
     deleteProduct,
     toggleAvailable,
   };
+
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;
 }
 
 export const useStore = () => useContext(StoreContext);
-

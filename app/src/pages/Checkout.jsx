@@ -11,6 +11,7 @@ export default function Checkout({ user }) {
     cart,
     cartTotal,
     placeOrder,
+    clearCart,
     cafeteriaActual,
     slotStatus,
     attachReceipt,
@@ -69,29 +70,33 @@ export default function Checkout({ user }) {
     ? slotStatus(cafeteriaActual).find((s) => s.hora === pickupTime)
     : null;
 
-  const pay = () => {
+  const pay = async () => {
     setProcessing(true);
 
     if (method === 'transferencia') {
-      const order = placeOrder({
+      const order = await placeOrder({
         pickupTime,
         customer: user?.name ?? 'estudiante',
         paymentMethod: 'transferencia',
       });
       setProcessing(false);
-      if (order) setDone(order);
+      if (order) {
+        setDone(order);
+        clearCart();
+      }
       return;
     }
 
-    setTimeout(() => {
-      const order = placeOrder({
-        pickupTime,
-        customer: user?.name ?? 'estudiante',
-        paymentMethod: 'tarjeta',
-      });
-      setProcessing(false);
-      if (order) setDone(order);
-    }, 1200);
+    const order = await placeOrder({
+      pickupTime,
+      customer: user?.name ?? 'estudiante',
+      paymentMethod: 'tarjeta',
+    });
+    setProcessing(false);
+    if (order) {
+      setDone(order);
+      clearCart();
+    }
   };
 
   // Adjunta el comprobante (redimensionado) al pedido pendiente

@@ -11,21 +11,23 @@ export default function OrdersQueue() {
 
   const visible = filtro === 'all' ? orders : orders.filter((o) => o.cafeteriaId === filtro);
 
-  const advance = (o) => {
+  const advance = async (o) => {
     const next = NEXT_STATE[o.status];
     if (!next) return;
-    setOrderStatus(o.id, next);
-    showToast(next === 'listo' ? `Pedido ${o.id} listo — usuario notificado` : `Pedido ${o.id} en preparación`, 'info');
+    const ok = await setOrderStatus(o.id, next);
+    if (ok) {
+      showToast(next === 'listo' ? `Pedido ${o.id} listo — usuario notificado` : `Pedido ${o.id} en preparación`, 'info');
+    }
   };
 
-  const confirmar = (o) => {
-    confirmTransfer(o.id);
-    showToast(`Pago de ${o.id} confirmado — el pedido entra a la cola`, 'success');
+  const confirmar = async (o) => {
+    const ok = await confirmTransfer(o.id);
+    if (ok) showToast(`Pago de ${o.id} confirmado — el pedido entra a la cola`, 'success');
   };
 
-  const rechazar = (o) => {
-    rejectTransfer(o.id);
-    showToast(`Transferencia de ${o.id} rechazada — stock devuelto`, 'warning');
+  const rechazar = async (o) => {
+    const ok = await rejectTransfer(o.id);
+    if (ok) showToast(`Transferencia de ${o.id} rechazada — stock devuelto`, 'warning');
   };
 
   const pendientesPago = visible.filter((o) => o.status === 'pendiente_pago');

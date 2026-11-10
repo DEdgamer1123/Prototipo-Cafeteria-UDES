@@ -81,6 +81,10 @@ npm install
 npm run dev
 ```
 
+`npm run dev` levanta **dos procesos**:
+- la web (Vite) en **http://localhost:5173/**
+- la **API de la demo** en `127.0.0.1:8787` (Vite la expone por proxy en `/api`)
+
 Abrir **http://localhost:5173/**
 
 | Acceso | Credencial |
@@ -90,13 +94,19 @@ Abrir **http://localhost:5173/**
 
 ### Scripts
 ```bash
-npm run dev      # servidor de desarrollo
+npm run dev      # API + web (demo compartida)
+npm run server   # solo la API local (puerto 8787)
+npm run dev:web  # solo la web
 npm run build    # build de producción
 npm run lint     # oxlint
 npm run preview  # previsualizar el build
 ```
 
-> 💡 **Demo con dos paneles a la vez:** abre una pestaña como estudiante y otra como admin; al marcar un pedido como "listo" en el admin, el usuario recibe el aviso en vivo (sincronización vía `localStorage`).
+> 🌐 **Demo compartida entre dispositivos:** los pedidos, el menú y el stock viven en la API local (`app/server/data/state.json`), no en el navegador. Si abres la app desde otro dispositivo por el túnel de VS Code, el panel admin ve **los mismos pedidos** y las actualizaciones llegan en 2-3 segundos.
+>
+> 🔄 **Reiniciar la demo:** borra `app/server/data/state.json` o ejecuta `curl -X POST http://127.0.0.1:8787/api/reset` (vacía pedidos y restaura el stock inicial).
+>
+> 🔒 La API no tiene autenticación real: úsala solo con un túnel privado y para pruebas.
 
 ---
 

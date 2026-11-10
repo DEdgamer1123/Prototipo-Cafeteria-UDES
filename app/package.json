@@ -4,7 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "concurrently -k -n api,web -c yellow,cyan \"npm:server\" \"npm:dev:web\"",
+    "dev:web": "vite",
+    "server": "node server/index.mjs",
     "build": "vite build",
     "lint": "oxlint",
     "preview": "vite preview",
@@ -29,6 +31,7 @@
     "@types/react-dom": "^19.2.7",
     "@vitejs/plugin-react": "^6.1.1",
     "@vitest/coverage-v8": "^5.1.0",
+    "concurrently": "^10.0.7",
     "oxlint": "^1.81.0",
     "tailwindcss": "^4.3.3",
     "typescript": "^7.0.2",
