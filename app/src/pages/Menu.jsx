@@ -74,7 +74,8 @@ function MenuContent({
           <h1 className="text-2xl font-extrabold text-udes-blue">Menú de hoy</h1>
           <p className="mt-1 flex items-center gap-1.5 text-sm font-semibold text-slate-600">
             <Store size={16} aria-hidden="true" className="text-udes-blue" />
-            {cafeteriaActual.nombre} · {cafeteriaActual.sede}
+            {cafeteriaActual.nombre}
+            {cafeteriaActual.sede ? ` · ${cafeteriaActual.sede}` : ''}
             <Link to="/cafeteria" className="ml-2 text-xs font-bold text-udes-blue underline">
               Cambiar
             </Link>

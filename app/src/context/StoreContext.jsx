@@ -16,6 +16,10 @@ const StoreContext = createContext(null);
 const LS_ORDERS = 'udesfood_orders';
 const LS_MENU = 'udesfood_menu';
 const LS_CAFETERIA = 'udesfood_cafeteria';
+const LS_MENU_VERSION = 'udesfood_menu_version';
+// Subir esta versión cuando cambie el catálogo base (fuerza un re-seed
+// en navegadores que ya habían cargado el prototipo).
+const MENU_VERSION = '2';
 
 function load(key, fallback) {
   try {
@@ -55,16 +59,29 @@ function minutosHastaCierre(cafeteria, hora) {
 }
 
 export function StoreProvider({ children }) {
-  // Normaliza stock para menús antiguos guardados en localStorage (sin campo stock)
-  const [products, setProducts] = useState(() =>
-    load(LS_MENU, MENU).map((p) => ({
-      stock: 10,
-      available: true,
-      cafeteriaId: null,
-      image: null,
-      ...p,
-    }))
-  );
+  // Normaliza stock para menús antiguos guardados en localStorage (sin campo stock).
+  // Si cambió la versión del catálogo, re-siembra con el menú actual.
+  const [products, setProducts] = useState(() => {
+    const normalize = (list) =>
+      list.map((p) => ({
+        stock: 10,
+        available: true,
+        cafeteriaId: null,
+        image: null,
+        ...p,
+      }));
+
+    try {
+      if (localStorage.getItem(LS_MENU_VERSION) !== MENU_VERSION) {
+        localStorage.setItem(LS_MENU_VERSION, MENU_VERSION);
+        return normalize(MENU);
+      }
+    } catch {
+      /* localStorage no disponible */
+    }
+
+    return normalize(load(LS_MENU, MENU));
+  });
   const [cart, setCart] = useState([]);
   const [orders, setOrders] = useState(() => load(LS_ORDERS, []));
   const [cafeteriaId, setCafeteriaId] = useState(() => load(LS_CAFETERIA, null));

@@ -2,16 +2,15 @@
 // isLunch: solo almuerzos permiten escoger hora de recogida.
 
 // ============================================================
-// CAFETERÍAS — NOMBRES PLACEHOLDER
-// Reemplazar `nombre` y `sede` cuando el usuario entregue los
-// nombres reales de las 3 cafeterías de la UDES. La tercera
-// NO vende almuerzos (regla de negocio acordada).
+// CAFETERÍAS — nombres reales de la UDES
+// Cafetería de las Flores: NO vende almuerzos ni desayunos.
+// `sede` queda vacía: la ubicación real se puede añadir después.
 // ============================================================
 export const CAFETERIAS = [
   {
     id: 'caf-1',
-    nombre: 'Cafetería 1',
-    sede: 'Sede principal',
+    nombre: 'Cafetería de buses',
+    sede: '',
     vendeAlmuerzos: true,
     vendeDesayunos: true,
     horarioApertura: '11:00',
@@ -20,8 +19,8 @@ export const CAFETERIAS = [
   },
   {
     id: 'caf-2',
-    nombre: 'Cafetería 2',
-    sede: 'Bloque B',
+    nombre: 'Cafetería Yariguíes',
+    sede: '',
     vendeAlmuerzos: true,
     vendeDesayunos: true,
     horarioApertura: '11:00',
@@ -30,8 +29,8 @@ export const CAFETERIAS = [
   },
   {
     id: 'caf-3',
-    nombre: 'Cafetería 3',
-    sede: 'Bloque C',
+    nombre: 'Cafetería de las Flores',
+    sede: '',
     vendeAlmuerzos: false,
     vendeDesayunos: false,
     horarioApertura: '11:00',

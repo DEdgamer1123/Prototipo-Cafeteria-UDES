@@ -54,7 +54,8 @@ export default function Cart() {
       <h1 className="mb-1 text-2xl font-extrabold text-udes-blue">Tu pedido</h1>
       <p className="mb-6 flex items-center gap-1.5 text-sm font-semibold text-slate-600">
         <Store size={16} aria-hidden="true" className="text-udes-blue" />
-        {cafeteriaActual.nombre} · {cafeteriaActual.sede}
+        {cafeteriaActual.nombre}
+        {cafeteriaActual.sede ? ` · ${cafeteriaActual.sede}` : ''}
       </p>
 
       <ul className="space-y-3 p-0">

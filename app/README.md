@@ -9,7 +9,7 @@ Aplicación web (prototipo) para la cafetería de la **Universidad de Santander 
 ## ✨ Funcionalidades
 
 ### 👤 Panel de usuario (estudiantes)
-- **Selector de cafetería**: 3 cafeterías (nombres placeholder); una de ellas **no vende almuerzos ni desayunos**, así que su menú solo muestra bebidas y snacks.
+- **Selector de cafetería**: Cafetería de buses, Cafetería Yariguíes y Cafetería de las Flores; esta última **no vende almuerzos ni desayunos**, así que su menú solo muestra bebidas y snacks.
 - **Login** con correo institucional (simulado; cualquier correo válido entra).
 - **Menú por categorías**: Almuerzos, Desayunos, Bebidas y **Snacks y tienda** (24 productos: paquetes, dulces, bebidas, sándwiches…), todos con imagen local.
 - **Carrito** con control de cantidades limitado por el **stock** disponible.
