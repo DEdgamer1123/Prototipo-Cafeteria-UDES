@@ -120,19 +120,6 @@ const OPCION_EMPANADA = {
   ],
 };
 
-const OPCION_PAQUETE = {
-  id: 'paquete',
-  label: 'Paquete',
-  required: true,
-  choices: [
-    { id: 'papas', label: 'Papas Margarita', price: 3500 },
-    { id: 'chocorramo', label: 'Chocorramo', price: 3000 },
-    { id: 'galletas', label: 'Galletas Festival', price: 2000 },
-    { id: 'jet', label: 'Chocolatina Jet', price: 2500 },
-    { id: 'mani', label: 'Maní Tostado', price: 2000 },
-  ],
-};
-
 // ============================================================
 // CATÁLOGO
 // ============================================================
@@ -144,10 +131,10 @@ export const MENU = [
   { id: 4, name: 'Alitas', description: 'Alitas con acompañamiento.', price: 13000, category: 'almuerzos', isLunch: true, available: true, stock: 12, cafeteriaId: 'caf-2', image: '/img/productos/alitas.jpg' },
 
   // --- Desayunos (solo se muestran en la Cafetería de buses) ---
-  { id: 5, name: 'Calentado Paisa', description: 'Frijoles, arroz, huevo, arepa y chocolate.', price: 8000, category: 'desayunos', isLunch: false, available: true, stock: 20, cafeteriaId: null, image: '/img/productos/calentado-paisa.jpg' },
   { id: 6, name: 'Huevos Rancheros', description: 'Con arepa, queso y café americano.', price: 7500, category: 'desayunos', isLunch: false, available: true, stock: 18, cafeteriaId: null, image: '/img/productos/huevos-rancheros.jpg' },
+  { id: 40, name: 'Huevos Pericos', description: 'Huevos revueltos con tomate y cebolla, con arepa.', price: 7000, category: 'desayunos', isLunch: false, available: true, stock: 16, cafeteriaId: null, image: '/img/productos/huevos-pericos.jpg' },
   { id: 7, name: 'Sándwich de Pollo', description: 'Pan artesanal, pollo desmechado, lechuga y tomate.', price: 8500, category: 'desayunos', isLunch: false, available: true, stock: 14, cafeteriaId: null, image: '/img/productos/sandwich.jpg' },
-  { id: 8, name: 'Yogurt con Granola', description: 'Yogurt natural, granola y fruta de temporada.', price: 4500, category: 'desayunos', isLunch: false, available: true, stock: 16, cafeteriaId: null, image: '/img/productos/yogurt.jpg' },
+  { id: 39, name: 'Sándwich de Jamón y Queso', description: 'Pan artesanal con jamón y queso fundido.', price: 7500, category: 'desayunos', isLunch: false, available: true, stock: 16, cafeteriaId: null, image: '/img/productos/sandwich-jamon.jpg' },
 
   // --- Bebidas (globales) ---
   { id: 9, name: 'Café', description: 'Elige tu preparación: americano, latte, capuchino o mocaccino.', price: 3500, category: 'bebidas', isLunch: false, available: true, stock: 40, cafeteriaId: null, image: '/img/productos/cafe.jpg', options: [OPCION_CAFE] },
@@ -164,8 +151,7 @@ export const MENU = [
   { id: 20, name: 'Chocorramo', description: 'Ponqué con cubierta de chocolate.', price: 3000, category: 'snacks', isLunch: false, available: true, stock: 30, cafeteriaId: null, image: '/img/productos/chocorramo.jpg' },
   { id: 21, name: 'Galletas Festival', description: 'Paquete de galletas surtidas.', price: 2000, category: 'snacks', isLunch: false, available: true, stock: 50, cafeteriaId: null, image: '/img/productos/galletas.jpg' },
   { id: 22, name: 'Chocolatina Jet', description: 'Barra de chocolate con leche.', price: 2500, category: 'snacks', isLunch: false, available: true, stock: 40, cafeteriaId: null, image: '/img/productos/chocolate.jpg' },
-  { id: 23, name: 'Maní Tostado', description: 'Bolsa personal de maní salado.', price: 2000, category: 'snacks', isLunch: false, available: true, stock: 35, cafeteriaId: null, image: '/img/productos/mani.jpg' },
-  { id: 25, name: 'Paquetes', description: 'Elige el paquete de tienda que quieras.', price: 2000, category: 'snacks', isLunch: false, available: true, stock: 60, cafeteriaId: null, image: '/img/productos/surtido.jpg', options: [OPCION_PAQUETE] },
+  { id: 23, name: 'Maní', description: 'Paquete personal de maní tostado.', price: 2000, category: 'snacks', isLunch: false, available: true, stock: 35, cafeteriaId: null, image: '/img/productos/mani.jpg' },
 
   // --- Almuerzos del día · Cafetería de buses ---
   { id: 26, name: 'Almuerzo del día (mesa)', description: 'Sopa de pastas, arroz blanco, garbanzos, ensalada y proteína a elección.', price: 15000, category: 'almuerzos', isLunch: true, available: true, stock: 15, cafeteriaId: 'caf-1', image: '/img/productos/almuerzo-ejecutivo.jpg', options: [OPCION_PROTEINA] },

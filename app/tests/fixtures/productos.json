@@ -31,18 +31,18 @@
       "stock": 12
     },
     {
-      "nombre": "Calentado Paisa",
-      "precio": 8000,
-      "categoria": "desayunos",
-      "es_almuerzo": false,
-      "stock": 20
-    },
-    {
       "nombre": "Huevos Rancheros",
       "precio": 7500,
       "categoria": "desayunos",
       "es_almuerzo": false,
       "stock": 18
+    },
+    {
+      "nombre": "Huevos Pericos",
+      "precio": 7000,
+      "categoria": "desayunos",
+      "es_almuerzo": false,
+      "stock": 16
     },
     {
       "nombre": "Sándwich de Pollo",
@@ -52,8 +52,8 @@
       "stock": 14
     },
     {
-      "nombre": "Yogurt con Granola",
-      "precio": 4500,
+      "nombre": "Sándwich de Jamón y Queso",
+      "precio": 7500,
       "categoria": "desayunos",
       "es_almuerzo": false,
       "stock": 16
@@ -143,18 +143,11 @@
       "stock": 40
     },
     {
-      "nombre": "Maní Tostado",
+      "nombre": "Maní",
       "precio": 2000,
       "categoria": "snacks",
       "es_almuerzo": false,
       "stock": 35
-    },
-    {
-      "nombre": "Paquetes",
-      "precio": 2000,
-      "categoria": "snacks",
-      "es_almuerzo": false,
-      "stock": 60
     },
     {
       "nombre": "Almuerzo del día (mesa)",

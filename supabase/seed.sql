@@ -1,6 +1,6 @@
 -- ============================================================
 -- UDES Food — seed reproducible del catálogo base
--- 33 productos del prototipo (app/src/data/menu.js).
+-- 32 productos del prototipo (app/src/data/menu.js).
 -- NO se siembran cafeterías: las crea el admin desde el panel
 -- con los nombres reales de la UDES (decisión del plan, todo 40).
 -- Las imágenes viven en app/public/img/productos y se migran a
@@ -14,10 +14,10 @@ values
   ('00000000-0000-4000-8000-000000000002', null, 'Pechuga a la plancha', 'Pechuga a la plancha con acompañante.', 14000, 'almuerzos', true, true, 12, 0, null),
   ('00000000-0000-4000-8000-000000000003', null, 'Cerdo', 'Cerdo con acompañante.', 14000, 'almuerzos', true, true, 12, 0, null),
   ('00000000-0000-4000-8000-000000000004', null, 'Alitas', 'Alitas con acompañamiento.', 13000, 'almuerzos', true, true, 12, 0, null),
-  ('00000000-0000-4000-8000-000000000005', null, 'Calentado Paisa', 'Frijoles, arroz, huevo, arepa y chocolate.', 8000, 'desayunos', false, true, 20, 0, null),
   ('00000000-0000-4000-8000-000000000006', null, 'Huevos Rancheros', 'Con arepa, queso y café americano.', 7500, 'desayunos', false, true, 18, 0, null),
+  ('00000000-0000-4000-8000-000000000040', null, 'Huevos Pericos', 'Huevos revueltos con tomate y cebolla, con arepa.', 7000, 'desayunos', false, true, 16, 0, null),
   ('00000000-0000-4000-8000-000000000007', null, 'Sándwich de Pollo', 'Pan artesanal, pollo desmechado, lechuga y tomate.', 8500, 'desayunos', false, true, 14, 0, null),
-  ('00000000-0000-4000-8000-000000000008', null, 'Yogurt con Granola', 'Yogurt natural, granola y fruta de temporada.', 4500, 'desayunos', false, true, 16, 0, null),
+  ('00000000-0000-4000-8000-000000000039', null, 'Sándwich de Jamón y Queso', 'Pan artesanal con jamón y queso fundido.', 7500, 'desayunos', false, true, 16, 0, null),
   ('00000000-0000-4000-8000-000000000009', null, 'Café', 'Elige tu preparación: americano, latte, capuchino o mocaccino.', 3500, 'bebidas', false, true, 40, 0, null),
   ('00000000-0000-4000-8000-000000000010', null, 'Jugo Natural', 'Mora, mango, lulo o maracuyá. En agua o leche.', 4000, 'bebidas', false, true, 25, 0, null),
   ('00000000-0000-4000-8000-000000000011', null, 'Limonada de Coco', 'La clásica, cremosa y refrescante.', 5500, 'bebidas', false, true, 20, 0, null),
@@ -30,8 +30,7 @@ values
   ('00000000-0000-4000-8000-000000000020', null, 'Chocorramo', 'Ponqué con cubierta de chocolate.', 3000, 'snacks', false, true, 30, 0, null),
   ('00000000-0000-4000-8000-000000000021', null, 'Galletas Festival', 'Paquete de galletas surtidas.', 2000, 'snacks', false, true, 50, 0, null),
   ('00000000-0000-4000-8000-000000000022', null, 'Chocolatina Jet', 'Barra de chocolate con leche.', 2500, 'snacks', false, true, 40, 0, null),
-  ('00000000-0000-4000-8000-000000000023', null, 'Maní Tostado', 'Bolsa personal de maní salado.', 2000, 'snacks', false, true, 35, 0, null),
-  ('00000000-0000-4000-8000-000000000025', null, 'Paquetes', 'Elige el paquete de tienda que quieras.', 2000, 'snacks', false, true, 60, 0, null),
+  ('00000000-0000-4000-8000-000000000023', null, 'Maní', 'Paquete personal de maní tostado.', 2000, 'snacks', false, true, 35, 0, null),
   ('00000000-0000-4000-8000-000000000026', null, 'Almuerzo del día (mesa)', 'Sopa de pastas, arroz blanco, garbanzos, ensalada y proteína a elección.', 15000, 'almuerzos', true, true, 15, 0, null),
   ('00000000-0000-4000-8000-000000000027', null, 'Almuerzo del día (para llevar)', 'Sopa de pastas, arroz blanco, garbanzos, ensalada y proteína a elección.', 17700, 'almuerzos', true, true, 15, 0, null),
   ('00000000-0000-4000-8000-000000000028', null, 'Proteína + 1 acompañante (mesa)', 'Elige una proteína y un acompañante.', 11000, 'almuerzos', true, true, 12, 0, null),

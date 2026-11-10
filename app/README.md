@@ -14,8 +14,8 @@ Aplicación web (prototipo) para la cafetería de la **Universidad de Santander 
 - **Menú fijo semanal de Cafetería Yariguíes**: costillas BBQ, pechuga a la plancha, cerdo, alitas, lasaña y salchipapa.
 - **Capacidad por franja según el lapso de entrega**: buses 2 min/almuerzo → **7 por franja**; Yariguíes 4 min/almuerzo (20 min por 5) → **3 por franja**. Al llenarse, la franja se bloquea con “Sin cupos”.
 - **Login** con correo institucional (simulado; cualquier correo válido entra).
-- **Menú por categorías**: Almuerzos, Desayunos, Bebidas y **Snacks y tienda** (33 productos: paquetes, dulces, bebidas, sándwiches…), todos con imagen local.
-- **Productos configurables**: al agregarlos se elige la variante — agua (300 ml o 600 ml, con o sin gas), café (americano, latte, capuchino, mocaccino), empanada (pollo, carne o mixta), proteína (carne o lomitos), proteína + 1 acompañante (proteína + acompañante) y paquetes (elige el snack).
+- **Menú por categorías**: Almuerzos, Desayunos, Bebidas y **Snacks y tienda** (32 productos: paquetes, dulces, bebidas, sándwiches…), todos con imagen local.
+- **Productos configurables**: al agregarlos se elige la variante — agua (300 ml o 600 ml, con o sin gas), café (americano, latte, capuchino, mocaccino), empanada (pollo, carne o mixta), proteína (carne o lomitos) y proteína + 1 acompañante (proteína + acompañante).
 - **Carrito** con control de cantidades limitado por el **stock** disponible.
 - **Hora de recogida programada** (11:30 a.m. – 2:00 p.m. en intervalos de 15 min) — aparece solo si el carrito contiene un almuerzo (*progressive disclosure*).
 - **Bloqueo por cupo y por tiempo**: cada franja tiene cupo por cafetería; cuando se llena muestra **“Sin cupos”** y no se puede seleccionar. También se bloquea si la cola estimada no alcanza a prepararse antes del cierre (**“No alcanza a prepararse antes del cierre”**).

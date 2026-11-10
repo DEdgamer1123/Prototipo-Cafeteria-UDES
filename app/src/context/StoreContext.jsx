@@ -21,7 +21,7 @@ const LS_CAFETERIA = 'udesfood_cafeteria';
 const LS_MENU_VERSION = 'udesfood_menu_version';
 // Subir esta versiÃ³n cuando cambie el catÃ¡logo base (fuerza un re-seed
 // en navegadores que ya habÃ­an cargado el prototipo).
-const MENU_VERSION = '7';
+const MENU_VERSION = '8';
 
 function load(key, fallback) {
   try {
