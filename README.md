@@ -1,12 +1,16 @@
-# ☕ UDES Food — Prototipo de cafetería universitaria
+<p align="center">
+  <img src="app/src/assets/logo-alt.png" alt="Universidad de Santander — UDES" width="260" />
+</p>
+
+# UDES Food — Prototipo de cafetería universitaria
 
 Aplicación web para ordenar y recoger comida en las cafeterías de la **Universidad de Santander (UDES)**. Permite elegir cafetería, armar el pedido, programar la hora de recogida, pagar (simulado o por transferencia con QR) y recibir el aviso cuando el pedido está listo. Incluye un panel de administración para la cola de pedidos, el menú y el stock.
 
-> **Estado:** prototipo funcional / demo. No es un producto en producción. El login es simulado, los pagos no son reales y los datos viven en un servidor local mientras está encendido. Ver [Limitaciones](#-limitaciones).
+> **Estado:** prototipo funcional / demo. No es un producto en producción. El login es simulado, los pagos no son reales y los datos viven en un servidor local mientras está encendido. Ver [Limitaciones](#limitaciones).
 
 ---
 
-## 🚀 Demo
+## Demo
 
 La demo se comparte por el **túnel de puertos de VS Code** (puerto `5173`). Todos los dispositivos conectados ven los **mismos pedidos, menú y stock**; la sincronización tarda 2-3 segundos.
 
@@ -19,7 +23,7 @@ La demo se comparte por el **túnel de puertos de VS Code** (puerto `5173`). Tod
 
 ---
 
-## ✨ Funcionalidades
+## Funcionalidades
 
 ### Estudiante
 - **Selector de cafetería**: Cafetería de buses, Cafetería Yariguíes y Cafetería de las Flores.
@@ -59,7 +63,7 @@ La demo se comparte por el **túnel de puertos de VS Code** (puerto `5173`). Tod
 
 ---
 
-## 🧱 Stack
+## Stack
 
 | Tecnología | Uso |
 |---|---|
@@ -74,7 +78,7 @@ La demo se comparte por el **túnel de puertos de VS Code** (puerto `5173`). Tod
 
 ---
 
-## 📁 Estructura
+## Estructura
 
 ```
 .
@@ -101,7 +105,7 @@ La demo se comparte por el **túnel de puertos de VS Code** (puerto `5173`). Tod
 
 ---
 
-## 🛠️ Cómo ejecutarlo
+## Cómo ejecutarlo
 
 Requisitos: **Node.js 20+** y npm.
 
@@ -141,7 +145,7 @@ npm run check:seed # compara el seed con el catálogo
 
 ---
 
-## 💾 Datos y reinicio
+## Datos y reinicio
 
 - Persistencia: `app/server/data/state.json` (ignorado por git).
 - Reiniciar pedidos y stock:
@@ -154,7 +158,7 @@ curl -X POST http://127.0.0.1:8787/api/reset
 
 ---
 
-## 🧪 Calidad
+## Calidad
 
 - `npm run test` — pruebas unitarias (Vitest) del módulo de dinero y utilidades.
 - `npm run typecheck` — TypeScript.
@@ -164,7 +168,7 @@ curl -X POST http://127.0.0.1:8787/api/reset
 
 ---
 
-## ⚠️ Limitaciones
+## Limitaciones
 
 - **Login simulado**: no hay autenticación real; el rol admin se decide por el prefijo del correo.
 - **Pagos simulados**: la tarjeta no cobra; el QR de transferencia es informativo y la confirmación es manual.
@@ -175,7 +179,7 @@ curl -X POST http://127.0.0.1:8787/api/reset
 
 ---
 
-## 🗺️ Roadmap
+## Roadmap
 
 1. Conectar **Supabase** (Postgres + RLS + Auth + Storage + Edge Functions) usando el esquema de `supabase/`.
 2. **Login institucional real** (correo `@udes.edu.co` validado contra el directorio) y Entra ID opcional.
@@ -186,13 +190,13 @@ curl -X POST http://127.0.0.1:8787/api/reset
 
 ---
 
-## 📄 Licencia
+## Licencia
 
 **Propietaria — Todos los derechos reservados.** Solo el titular (Edgar Andrés Figueroa Hernández / DEdgamer1123) puede usar, copiar, modificar, distribuir o vender este software. Cualquier uso por terceros requiere autorización previa y por escrito. Ver [LICENSE](./LICENSE).
 
 ---
 
-## 👤 Autor
+## Autor
 
 **Edgar Andrés Figueroa Hernández** · [@DEdgamer1123](https://github.com/DEdgamer1123)
 

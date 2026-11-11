@@ -1,14 +1,18 @@
-# 🍽️ UDES Food — Prototipo de app web para la cafetería UDES
+<p align="center">
+  <img src="src/assets/logo-alt.png" alt="Universidad de Santander — UDES" width="220" />
+</p>
+
+# UDES Food — Prototipo de app web para la cafetería UDES
 
 Aplicación web (prototipo) para la cafetería de la **Universidad de Santander (UDES)** que permite a los estudiantes **ordenar, pagar y programar su almuerzo** para recogerlo a la hora que escojan, sin hacer filas. Incluye un **panel de administración** para gestionar el menú y la cola de pedidos.
 
-> ⚠️ Prototipo funcional sin backend: los datos viven en `localStorage` del navegador y las imágenes/pagos son simulados.
+> **Prototipo funcional** con API local compartida: los pedidos, el menú y el stock viven en `app/server/data/state.json`; el login y los pagos son simulados.
 
 ---
 
-## ✨ Funcionalidades
+## Funcionalidades
 
-### 👤 Panel de usuario (estudiantes)
+### Panel de usuario (estudiantes)
 - **Selector de cafetería**: Cafetería de buses, Cafetería Yariguíes y Cafetería de las Flores. Los desayunos **solo se venden en la Cafetería de buses**; la de las Flores no vende almuerzos ni desayunos (solo bebidas y snacks).
 - **Menú del día de la Cafetería de buses** tomado del tablero: almuerzo del día (mesa $15.000 / para llevar $13.700), proteína + 1 acompañante (mesa $11.000 / para llevar $12.600) y porciones sueltas (sopa, arroz, ensalada, tajadas, carne, lomitos, jugo).
 - **Menú fijo semanal de Cafetería Yariguíes**: costillas BBQ, pechuga a la plancha, cerdo, alitas, lasaña y salchipapa.
@@ -27,7 +31,7 @@ Aplicación web (prototipo) para la cafetería de la **Universidad de Santander 
 - **Auto-agotado**: cuando el stock de un producto llega a 0, pasa automáticamente a **Agotado** y deja de ofrecerse.
 - **Aviso de bajo stock** ("Solo quedan X unidades") y productos agotados bloqueados.
 
-### 🛠️ Panel de administración
+### Panel de administración
 - Entrar con cualquier correo que empiece por `admin` (ej. `admin@udes.edu.co`).
 - **Cola de pedidos** filtrable por cafetería, con acciones: *Iniciar preparación* → *Marcar como listo y notificar*.
 - **Confirmación de transferencias**: los pedidos con pago por QR aparecen en *Pagos por verificar* con el comprobante adjunto y botones **Confirmar pago** / **Rechazar** (al rechazar se devuelve el stock).
@@ -40,7 +44,7 @@ Aplicación web (prototipo) para la cafetería de la **Universidad de Santander 
 
 ---
 
-## 🧱 Stack técnico
+## Stack técnico
 
 | Tecnología | Uso |
 |---|---|
@@ -49,11 +53,11 @@ Aplicación web (prototipo) para la cafetería de la **Universidad de Santander 
 | **Tailwind CSS 4** | Estilos con design tokens (`@theme` en `index.css`) |
 | **React Router 7** | Navegación SPA |
 | **Lucide React** | Iconografía (sin emojis en la UI) |
-| **Context API + localStorage** | Estado global (menú, carrito, pedidos) y sincronización entre pestañas |
+| **Context API + API local** | Estado global; pedidos, menú y stock compartidos entre dispositivos |
 
 ---
 
-## 🎨 Principios de diseño aplicados
+## Principios de diseño aplicados
 
 1. **Ley de Hick** — decisiones mínimas por pantalla: 4 categorías, franjas de hora predefinidas, un flujo claro por paso, 3 métricas esenciales en el admin.
 2. **Design tokens** — colores institucionales, tipografía (Montserrat), radios, sombras y duraciones definidos una sola vez en `src/index.css`.
@@ -64,7 +68,7 @@ Aplicación web (prototipo) para la cafetería de la **Universidad de Santander 
 
 ---
 
-## 📱 Responsive
+## Responsive
 
 Verificado automáticamente (overflow, objetivos táctiles, footer y modal) en **28 resoluciones**, desde **320×568** (celular pequeño) hasta **2560×1440** (monitor 2K), incluyendo Galaxy S20 (360×800), iPhones, iPads y laptops comunes.
 
@@ -73,7 +77,7 @@ Verificado automáticamente (overflow, objetivos táctiles, footer y modal) en *
 
 ---
 
-## 🚀 Cómo ejecutarlo
+## Cómo ejecutarlo
 
 ```bash
 cd app
@@ -102,15 +106,15 @@ npm run lint     # oxlint
 npm run preview  # previsualizar el build
 ```
 
-> 🌐 **Demo compartida entre dispositivos:** los pedidos, el menú y el stock viven en la API local (`app/server/data/state.json`), no en el navegador. Si abres la app desde otro dispositivo por el túnel de VS Code, el panel admin ve **los mismos pedidos** y las actualizaciones llegan en 2-3 segundos.
+> **Demo compartida entre dispositivos:** los pedidos, el menú y el stock viven en la API local (`app/server/data/state.json`), no en el navegador. Si abres la app desde otro dispositivo por el túnel de VS Code, el panel admin ve **los mismos pedidos** y las actualizaciones llegan en 2-3 segundos.
 >
-> 🔄 **Reiniciar la demo:** borra `app/server/data/state.json` o ejecuta `curl -X POST http://127.0.0.1:8787/api/reset` (vacía pedidos y restaura el stock inicial).
+> **Reiniciar la demo:** borra `app/server/data/state.json` o ejecuta `curl -X POST http://127.0.0.1:8787/api/reset` (vacía pedidos y restaura el stock inicial).
 >
-> 🔒 La API no tiene autenticación real: úsala solo con un túnel privado y para pruebas.
+> La API no tiene autenticación real: úsala solo con un túnel privado y para pruebas.
 
 ---
 
-## 📁 Estructura
+## Estructura
 
 ```
 app/
@@ -141,7 +145,7 @@ app/
 
 ---
 
-## 🗺️ Fase 2 (roadmap)
+## Fase 2 (roadmap)
 
 - **SSO real con Microsoft Entra ID** (MSAL.js): el nombre completo y el código del estudiante llegarían del directorio institucional, sin formularios.
 - **Backend + base de datos** (menú, pedidos, usuarios, stock persistente). El repositorio ya incluye el esquema, las políticas RLS y las funciones preparadas para Supabase (`supabase/`), pero **no está conectado** todavía: primero se valida el prototipo con el usuario.
