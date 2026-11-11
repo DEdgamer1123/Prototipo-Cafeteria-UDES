@@ -152,3 +152,9 @@ app/
 ---
 
 © 2026 Universidad de Santander · **UDES Food** — prototipo académico.
+
+---
+
+## Licencia
+
+**Propietaria — Todos los derechos reservados.** Solo el titular puede usar, copiar, modificar, distribuir o vender este software. Ver [LICENSE](../LICENSE).
