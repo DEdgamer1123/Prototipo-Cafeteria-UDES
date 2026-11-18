@@ -60,6 +60,7 @@ La demo se comparte por el **túnel de puertos de VS Code** (puerto `5173`). Tod
 - Diseño responsive (móvil, tablet, escritorio) con tokens de diseño y accesibilidad (foco visible, ARIA, focus trap, objetivos táctiles).
 - Datos compartidos entre dispositivos mediante API local + polling.
 - Sincronización de la cafetería entre pestañas del mismo navegador.
+- **Asistente virtual** independiente en `/chat.html`: mismo estilo visual, avatar de barista y respuestas sobre menú, precios, cafeterías, horarios, opciones, cupos, pagos, pedidos y cancelación.
 
 ---
 
@@ -86,7 +87,9 @@ La demo se comparte por el **túnel de puertos de VS Code** (puerto `5173`). Tod
 │   ├── server/
 │   │   ├── index.mjs          # API compartida (pedidos, menú, stock)
 │   │   └── data/state.json    # Datos de la demo (ignorado por git)
-│   ├── public/img/productos/  # Imágenes locales de los productos
+│   ├── public/
+│   │   ├── chat.html          # Asistente virtual independiente
+│   │   └── img/productos/     # Imágenes locales de los productos
 │   ├── src/
 │   │   ├── auth/              # (preparado para Supabase, no conectado)
 │   │   ├── components/        # UI (ProductCard, Modal, Toast, etc.)

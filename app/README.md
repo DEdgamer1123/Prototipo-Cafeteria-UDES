@@ -119,13 +119,16 @@ npm run preview  # previsualizar el build
 ```
 app/
 ├── index.html
-├── public/                  # favicon, íconos
+├── server/                  # API local compartida (pedidos, menú, stock)
+├── public/
+│   ├── chat.html            # asistente virtual
+│   └── img/productos/       # imágenes de los productos
 └── src/
     ├── main.jsx / App.jsx   # rutas y shell de usuario
     ├── index.css            # design tokens (@theme) + utilidades
     ├── assets/              # logos UDES
-    ├── data/menu.js         # menú mock, categorías, franjas de hora, formatCOP
-    ├── context/StoreContext.jsx  # estado global: menú, carrito, pedidos, toasts
+    ├── data/menu.js         # catálogo, cafeterías, opciones y franjas
+    ├── context/StoreContext.jsx  # estado global: API, carrito, pedidos, toasts
     ├── components/
     │   ├── Navbar.jsx / Footer.jsx
     │   ├── ProductCard.jsx  # tarjeta de producto (stock, agotado, low-stock)

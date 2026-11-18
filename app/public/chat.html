@@ -1,0 +1,759 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Asistente virtual de la cafetería UDES Food: menú, precios, cafeterías, horarios, pagos y pedidos." />
+  <title>Asistente virtual · UDES Food</title>
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --blue: #004b9b;
+      --blue-dark: #003876;
+      --blue-light: #e6eff9;
+      --gold: #c89b73;
+      --gold-dark: #8a6142;
+      --gold-light: #f7efe7;
+      --success: #157f3d;
+      --success-light: #e5f5ea;
+      --warning: #b26a00;
+      --warning-light: #fff4e0;
+      --danger: #b02a37;
+      --danger-light: #fdecee;
+      --ink: #1a2332;
+      --muted: #64748b;
+      --bg: #f6f8fb;
+      --line: #e5ebf3;
+      --radius: 1rem;
+      --shadow-card: 0 2px 10px rgb(0 75 155 / 0.08);
+      --shadow-pop: 0 8px 30px rgb(0 75 155 / 0.16);
+      --font: 'Montserrat', system-ui, -apple-system, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page {
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .chat {
+      width: 100%;
+      max-width: 920px;
+      height: min(820px, calc(100dvh - 48px));
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      box-shadow: var(--shadow-pop);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* ---------- Header ---------- */
+    .chat-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 18px;
+      background: linear-gradient(135deg, var(--blue) 0%, var(--blue-dark) 100%);
+      color: #fff;
+      flex: 0 0 auto;
+    }
+    .brand { display: flex; align-items: center; gap: 11px; min-width: 0; }
+    .brand .logo {
+      height: 38px;
+      width: auto;
+      background: #fff;
+      border-radius: 9px;
+      padding: 3px 6px;
+      flex: 0 0 auto;
+    }
+    .brand .avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgb(255 255 255 / 0.7);
+      flex: 0 0 auto;
+    }
+    .titles { min-width: 0; }
+    .titles h1 {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: .2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .titles p {
+      margin: 2px 0 0;
+      font-size: 11px;
+      font-weight: 500;
+      color: rgb(255 255 255 / 0.78);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #4ade80;
+      box-shadow: 0 0 0 3px rgb(74 222 128 / 0.18);
+      flex: 0 0 auto;
+    }
+    .header-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; flex: 0 0 auto; }
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid rgb(255 255 255 / 0.4);
+      background: transparent;
+      color: #fff;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .15s ease;
+      white-space: nowrap;
+    }
+    .btn-ghost:hover { background: rgb(255 255 255 / 0.12); }
+    .btn-ghost svg { flex: 0 0 auto; }
+
+    /* ---------- Messages ---------- */
+    .messages {
+      flex: 1 1 auto;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      background: #f8fafc;
+      scroll-behavior: smooth;
+    }
+    .messages::-webkit-scrollbar { width: 10px; }
+    .messages::-webkit-scrollbar-thumb { background: #cfd9e6; border-radius: 999px; border: 3px solid #f8fafc; }
+
+    .msg { display: flex; align-items: flex-end; gap: 9px; max-width: 100%; }
+    .msg.user { justify-content: flex-end; }
+    .msg .avatar-sm {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid #dbe3ee;
+      flex: 0 0 auto;
+      margin-bottom: 2px;
+    }
+    .stack { display: flex; flex-direction: column; max-width: 78%; }
+    .msg.user .stack { align-items: flex-end; }
+    .meta {
+      font-size: 10px;
+      font-weight: 700;
+      color: #8a97a8;
+      margin: 0 0 4px 3px;
+      letter-spacing: .15px;
+    }
+    .bubble {
+      padding: 11px 14px;
+      border-radius: 16px;
+      font-size: 14px;
+      line-height: 1.55;
+      white-space: pre-line;
+      word-break: break-word;
+      box-shadow: var(--shadow-card);
+    }
+    .msg.bot .bubble {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-bottom-left-radius: 4px;
+      color: #22303f;
+    }
+    .msg.user .bubble {
+      background: var(--blue);
+      color: #fff;
+      border-bottom-right-radius: 4px;
+    }
+    .bubble strong { font-weight: 800; }
+    .bubble a { color: var(--blue); font-weight: 700; }
+    .msg.user .bubble a { color: #fff; }
+
+    .typing {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 14px 16px;
+    }
+    .typing span {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #9aa8b9;
+      animation: blink 1.2s infinite both;
+    }
+    .typing span:nth-child(2) { animation-delay: .18s; }
+    .typing span:nth-child(3) { animation-delay: .36s; }
+    @keyframes blink {
+      0%, 80%, 100% { opacity: .25; transform: translateY(0); }
+      40% { opacity: 1; transform: translateY(-3px); }
+    }
+
+    /* ---------- Quick replies ---------- */
+    .quick {
+      display: flex;
+      gap: 8px;
+      padding: 10px 16px;
+      overflow-x: auto;
+      background: #fff;
+      border-top: 1px solid #eef2f7;
+      flex: 0 0 auto;
+      scrollbar-width: none;
+    }
+    .quick::-webkit-scrollbar { display: none; }
+    .quick:empty { display: none; }
+    .chip {
+      flex: 0 0 auto;
+      border: 1px solid #c9d9ec;
+      background: #f4f8fd;
+      color: var(--blue);
+      border-radius: 999px;
+      padding: 8px 13px;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .15s ease, color .15s ease, border-color .15s ease;
+    }
+    .chip:hover { background: var(--blue); border-color: var(--blue); color: #fff; }
+
+    /* ---------- Composer ---------- */
+    .composer {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px 8px;
+      background: #fff;
+      flex: 0 0 auto;
+    }
+    .composer input {
+      flex: 1;
+      min-width: 0;
+      border: 1px solid #cfd9e6;
+      border-radius: 999px;
+      padding: 12px 16px;
+      font-family: inherit;
+      font-size: 14px;
+      color: var(--ink);
+      background: #fbfdff;
+      outline: none;
+      transition: border-color .15s ease, box-shadow .15s ease;
+    }
+    .composer input::placeholder { color: #94a3b8; }
+    .composer input:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgb(0 75 155 / 0.14);
+    }
+    .send {
+      width: 46px;
+      height: 46px;
+      border: 0;
+      border-radius: 50%;
+      background: var(--blue);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      flex: 0 0 auto;
+      transition: background .15s ease, transform .1s ease;
+    }
+    .send:hover { background: var(--blue-dark); }
+    .send:active { transform: scale(.96); }
+    .send:disabled { opacity: .45; cursor: not-allowed; }
+    .footnote {
+      padding: 0 16px 12px;
+      background: #fff;
+      font-size: 10.5px;
+      color: #8290a3;
+      text-align: center;
+      flex: 0 0 auto;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @media (max-width: 720px) {
+      .page { padding: 0; }
+      .chat { height: 100dvh; max-width: none; border-radius: 0; border: 0; }
+      .chat-header { padding: 12px 14px; }
+      .brand .logo { display: none; }
+      .btn-ghost span { display: none; }
+      .btn-ghost { padding: 9px; }
+      .messages { padding: 14px; }
+      .stack { max-width: 86%; }
+      .footnote { padding-bottom: 10px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+      .messages { scroll-behavior: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <section class="chat" aria-label="Asistente virtual de la cafetería UDES Food">
+      <header class="chat-header">
+        <div class="brand">
+          <img class="logo" src="/favicon.png" alt="Universidad de Santander" />
+          <img class="avatar" src="/img/bot-avatar.jpg" alt="Sofía, asistente virtual" />
+          <div class="titles">
+            <h1>Sofía</h1>
+            <p><span class="status-dot" aria-hidden="true"></span> Asistente virtual · UDES Food</p>
+          </div>
+        </div>
+        <div class="header-actions">
+          <button class="btn-ghost" id="reset" type="button" title="Reiniciar conversación">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+            <span>Reiniciar</span>
+          </button>
+          <a class="btn-ghost" href="/" title="Abrir la aplicación">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M21 14v7H3V3h7"/></svg>
+            <span>Abrir app</span>
+          </a>
+        </div>
+      </header>
+
+      <div class="messages" id="messages" role="log" aria-live="polite" aria-label="Conversación con el asistente"></div>
+      <div class="quick" id="quick" aria-label="Respuestas rápidas"></div>
+
+      <form class="composer" id="composer" autocomplete="off">
+        <label class="sr-only" for="input">Escribe tu mensaje</label>
+        <input id="input" name="message" type="text" placeholder="Escribe tu pregunta…" maxlength="300" required />
+        <button class="send" type="submit" aria-label="Enviar mensaje">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+        </button>
+      </form>
+      <p class="footnote">Asistente virtual con información de demostración. La disponibilidad y el estado de tu pedido se confirman en la app.</p>
+    </section>
+  </div>
+
+  <script>
+    const messagesEl = document.getElementById('messages');
+    const quickEl = document.getElementById('quick');
+    const form = document.getElementById('composer');
+    const input = document.getElementById('input');
+    const resetBtn = document.getElementById('reset');
+    const sendBtn = form.querySelector('.send');
+
+    const BOT_AVATAR = '/img/bot-avatar.jpg';
+
+    /* ---------- Datos de referencia ---------- */
+    const CAFETERIAS = [
+      { nombre: 'Cafetería de buses', horario: '11:00 a 15:00', almuerzos: true, desayunos: true, cupo: 7, minutos: 2 },
+      { nombre: 'Cafetería Yariguíes', horario: '11:00 a 15:00', almuerzos: true, desayunos: false, cupo: 3, minutos: 4 },
+      { nombre: 'Cafetería de las Flores', horario: '11:00 a 14:30', almuerzos: false, desayunos: false, cupo: 0, minutos: 0 },
+    ];
+
+    const MENU = [
+      { nombre: 'Costillas BBQ', precio: 15000, caf: 'Yariguíes' },
+      { nombre: 'Pechuga a la plancha', precio: 14000, caf: 'Yariguíes' },
+      { nombre: 'Cerdo', precio: 14000, caf: 'Yariguíes' },
+      { nombre: 'Alitas', precio: 13000, caf: 'Yariguíes' },
+      { nombre: 'Lasaña', precio: 13000, caf: 'Yariguíes' },
+      { nombre: 'Salchipapa', precio: 10000, caf: 'Yariguíes' },
+      { nombre: 'Almuerzo del día (mesa)', precio: 15000, caf: 'Buses', opciones: 'proteína: carne con chimichurri o lomitos de pollo' },
+      { nombre: 'Almuerzo del día (para llevar)', precio: 17700, caf: 'Buses', opciones: 'proteína: carne con chimichurri o lomitos de pollo' },
+      { nombre: 'Proteína + 1 acompañante (mesa)', precio: 11000, caf: 'Buses', opciones: 'proteína (2) + acompañante (sopa, arroz, garbanzos o ensalada)' },
+      { nombre: 'Proteína + 1 acompañante (para llevar)', precio: 12600, caf: 'Buses', opciones: 'proteína (2) + acompañante (sopa, arroz, garbanzos o ensalada)' },
+      { nombre: 'Proteína', precio: 7500, caf: 'Buses', opciones: 'carne con chimichurri o lomitos de pollo' },
+      { nombre: 'Sopa de pastas', precio: 5000, caf: 'Buses' },
+      { nombre: 'Arroz blanco', precio: 3000, caf: 'Buses' },
+      { nombre: 'Ensalada de tomate y pepino', precio: 5000, caf: 'Buses' },
+      { nombre: 'Jugo del día', precio: 1500, caf: 'Buses' },
+      { nombre: 'Café', precio: 3500, caf: 'Todas', opciones: 'americano $3.500, latte $4.500, capuchino $5.000, mocaccino $5.500' },
+      { nombre: 'Agua', precio: 2000, caf: 'Todas', opciones: '300 ml $2.000 o 600 ml $3.000, con o sin gas' },
+      { nombre: 'Jugo Hit', precio: 3500, caf: 'Todas' },
+      { nombre: 'Jugo Natural', precio: 4000, caf: 'Todas' },
+      { nombre: 'Limonada de Coco', precio: 5500, caf: 'Todas' },
+      { nombre: 'Gaseosa Personal', precio: 4000, caf: 'Todas' },
+      { nombre: 'Bebida Energizante', precio: 6500, caf: 'Todas' },
+      { nombre: 'Empanada', precio: 3000, caf: 'Todas', opciones: 'pollo, carne o mixta' },
+      { nombre: 'Papas Margarita', precio: 3500, caf: 'Todas' },
+      { nombre: 'Chocorramo', precio: 3000, caf: 'Todas' },
+      { nombre: 'Galletas Festival', precio: 2000, caf: 'Todas' },
+      { nombre: 'Chocolatina Jet', precio: 2500, caf: 'Todas' },
+      { nombre: 'Maní', precio: 2000, caf: 'Todas' },
+      { nombre: 'Huevos Rancheros', precio: 7500, caf: 'Buses' },
+      { nombre: 'Huevos Pericos', precio: 7000, caf: 'Buses' },
+      { nombre: 'Sándwich de Pollo', precio: 8500, caf: 'Buses' },
+      { nombre: 'Sándwich de Jamón y Queso', precio: 7500, caf: 'Buses' },
+    ];
+
+    const ALIASES = [
+      ['almuerzo del dia', ['almuerzo del dia', 'almuerzo', 'menu del dia']],
+      ['proteina + 1 acompanante', ['proteina + 1', 'proteina con acompanante', 'proteina mas acompanante']],
+      ['jugo hit', ['jugo hit', 'hit']],
+      ['papas margarita', ['papas', 'papas margarita']],
+      ['galletas festival', ['galletas', 'festival']],
+      ['chocolatina jet', ['chocolatina', 'jet']],
+      ['mani', ['mani', 'maní']],
+      ['agua', ['agua']],
+      ['cafe', ['cafe', 'café']],
+      ['empanada', ['empanada']],
+      ['chocorramo', ['chocorramo']],
+      ['costillas bbq', ['costillas']],
+      ['pechuga a la plancha', ['pechuga']],
+      ['cerdo', ['cerdo']],
+      ['alitas', ['alitas']],
+      ['lasana', ['lasana', 'lasaña']],
+      ['salchipapa', ['salchipapa']],
+      ['huevos pericos', ['huevos pericos', 'pericos']],
+      ['huevos rancheros', ['huevos rancheros', 'huevos']],
+      ['sandwich de jamon y queso', ['sandwich de jamon', 'jamon y queso']],
+      ['sandwich de pollo', ['sandwich de pollo', 'sandwich']],
+      ['sopa de pastas', ['sopa']],
+      ['arroz blanco', ['arroz']],
+      ['ensalada de tomate y pepino', ['ensalada']],
+      ['jugo del dia', ['jugo del dia']],
+    ];
+
+    let liveProducts = [];
+    fetch('/api/state')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data && Array.isArray(data.products)) liveProducts = data.products;
+      })
+      .catch(() => {});
+
+    /* ---------- Utilidades ---------- */
+    const formatCOP = (n) =>
+      Number(n).toLocaleString('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 });
+
+    const normalize = (text) =>
+      text
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+
+    const escapeHtml = (text) =>
+      text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+    const renderText = (text) =>
+      escapeHtml(text)
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/(^|[^*])\*([^*]+)\*(?!\*)/g, '$1<em>$2</em>');
+
+    function findProduct(normalizedText) {
+      const withSpaces = ` ${normalizedText} `;
+      for (const [productName, aliases] of ALIASES) {
+        for (const alias of aliases) {
+          if (withSpaces.includes(` ${normalize(alias)} `)) {
+            return MENU.find((p) => normalize(p.nombre) === normalize(productName)) || null;
+          }
+        }
+      }
+      return null;
+    }
+
+    function liveFor(product) {
+      if (!product) return null;
+      const name = normalize(product.nombre);
+      return (
+        liveProducts.find((p) => normalize(p.name) === name) ||
+        liveProducts.find((p) => normalize(p.name).includes(name)) ||
+        null
+      );
+    }
+
+    function productAnswer(product) {
+      const live = liveFor(product);
+      const price = live ? live.price : product.precio;
+      const stock = live
+        ? live.available && live.stock > 0
+          ? `Disponibles: ${live.stock}.`
+          : 'Agotado por ahora.'
+        : 'Disponibilidad sujeta a la app.';
+      const options = live && live.options && live.options.length
+        ? '\nOpciones: ' + live.options.map((g) => `${g.label}: ${g.choices.map((c) => c.label).join(', ')}`).join(' · ') + '.'
+        : product.opciones
+          ? `\nOpciones: ${product.opciones}.`
+          : '';
+      return {
+        text: `**${product.nombre}**: ${formatCOP(price)}. ${stock}${options}`,
+        chips: ['Ver menú', 'Precios', 'Formas de pago'],
+      };
+    }
+
+    /* ---------- Respuestas ---------- */
+    const greeting = () => ({
+      text: 'Hola, soy Sofía, la asistente virtual de la cafetería. Puedo ayudarte con el menú, los precios, las cafeterías, los horarios, los pagos y el estado de tu pedido.\n\n¿Qué necesitas?',
+      chips: ['Ver menú', 'Cafeterías y horarios', 'Precios', 'Formas de pago', 'Mi pedido'],
+    });
+
+    const cafeteriasAnswer = () => ({
+      text: 'Tenemos 3 cafeterías:\n\n• **Cafetería de buses** — 11:00 a 15:00. Vende almuerzos y desayunos.\n• **Cafetería Yariguíes** — 11:00 a 15:00. Solo almuerzos.\n• **Cafetería de las Flores** — 11:00 a 14:30. Solo bebidas y snacks.\n\nPuedes elegir la cafetería al entrar a la app y cambiarla desde la barra superior.',
+      chips: ['Ver menú', 'Horarios de recogida', 'Cupos', 'Formas de pago'],
+    });
+
+    const scheduleAnswer = () => ({
+      text: 'Las franjas de recogida de almuerzos van de **11:30 a 14:00**, cada 15 minutos.\n\n• Cafetería de buses: 11:00 a 15:00.\n• Yariguíes: 11:00 a 15:00.\n• Flores: 11:00 a 14:30 (no vende almuerzos).\n\nSolo los almuerzos piden hora de recogida.',
+      chips: ['Cupos', 'Ver menú', 'Cafeterías y horarios'],
+    });
+
+    const menuAnswer = (n) => {
+      const enBuses = n.includes('buses') || n.includes('bus');
+      const enYarigues = n.includes('yarigues') || n.includes('yariguies');
+      if (enBuses) {
+        return {
+          text: 'Menú de la **Cafetería de buses**:\n\n• Almuerzo del día — mesa $15.000 / para llevar $17.700.\n• Proteína + 1 acompañante — mesa $11.000 / para llevar $12.600.\n• Proteína — $7.500.\n• Sopa de pastas — $5.000.\n• Arroz blanco — $3.000.\n• Ensalada de tomate y pepino — $5.000.\n• Jugo del día — $1.500.\n\nEl almuerzo incluye sopa, arroz, garbanzos, ensalada y la proteína que elijas.',
+          chips: ['Proteína + 1 acompañante', 'Precios', 'Cupos', 'Formas de pago'],
+        };
+      }
+      if (enYarigues) {
+        return {
+          text: 'Menú fijo de **Cafetería Yariguíes**:\n\n• Costillas BBQ — $15.000.\n• Pechuga a la plancha — $14.000.\n• Cerdo — $14.000.\n• Alitas — $13.000.\n• Lasaña — $13.000.\n• Salchipapa — $10.000.\n\nSolo vende almuerzos (no desayunos).',
+          chips: ['Precios', 'Cupos', 'Formas de pago'],
+        };
+      }
+      return {
+        text: 'El menú depende de la cafetería:\n\n• **Buses**: almuerzo del día (mesa $15.000 / llevar $17.700), proteína + 1 acompañante (mesa $11.000 / llevar $12.600), proteína $7.500 y porciones desde $1.500.\n• **Yariguíes**: costillas, pechuga, cerdo, alitas, lasaña y salchipapa (entre $10.000 y $15.000).\n• **Flores**: solo bebidas y snacks.\n\n¿Quieres el detalle de alguna cafetería?',
+        chips: ['Menú de buses', 'Menú de Yariguíes', 'Bebidas', 'Snacks'],
+      };
+    };
+
+    const breakfastAnswer = () => ({
+      text: 'Los desayunos **solo se venden en la Cafetería de buses**:\n\n• Huevos rancheros — $7.500.\n• Huevos pericos — $7.000.\n• Sándwich de pollo — $8.500.\n• Sándwich de jamón y queso — $7.500.\n\nYariguíes y Flores no venden desayunos.',
+      chips: ['Ver menú', 'Cafeterías y horarios', 'Formas de pago'],
+    });
+
+    const drinksAnswer = () => ({
+      text: 'Bebidas disponibles:\n\n• **Café** — americano $3.500, latte $4.500, capuchino $5.000, mocaccino $5.500.\n• **Agua** — 300 ml $2.000 o 600 ml $3.000, con o sin gas.\n• **Jugo Hit** — $3.500.\n• Jugo natural — $4.000.\n• Limonada de coco — $5.500.\n• Gaseosa personal — $4.000.\n• Bebida energizante — $6.500.\n\nTodas se pueden pedir en cualquier cafetería.',
+      chips: ['Café', 'Agua', 'Snacks', 'Precios'],
+    });
+
+    const snacksAnswer = () => ({
+      text: 'Snacks y tienda:\n\n• Empanada — $3.000 (pollo, carne o mixta).\n• Papas Margarita — $3.500.\n• Chocorramo — $3.000.\n• Galletas Festival — $2.000.\n• Chocolatina Jet — $2.500.\n• Maní — $2.000.\n\nDisponibles en todas las cafeterías.',
+      chips: ['Empanada', 'Agua', 'Formas de pago', 'Ver menú'],
+    });
+
+    const paymentAnswer = () => ({
+      text: 'Puedes pagar de dos formas:\n\n• **Tarjeta (simulada)**: el pedido queda confirmado de inmediato.\n• **Transferencia con QR**: se genera un QR con la referencia de tu pedido. El pedido queda en *Pago pendiente* hasta que la cafetería confirme la transferencia; puedes adjuntar el comprobante.\n\nNo se maneja efectivo en esta versión. El QR es informativo: no se cobra automáticamente.',
+      chips: ['Mi pedido', 'Cupos', 'Cancelar un pedido'],
+    });
+
+    const slotsAnswer = () => ({
+      text: 'Cada franja tiene cupo según la cafetería:\n\n• **Cafetería de buses**: 7 almuerzos por franja (entrega cada 2 minutos).\n• **Cafetería Yariguíes**: 3 almuerzos por franja.\n• **Flores**: no vende almuerzos.\n\nUna franja se bloquea si se llena o si la cola no alcanza a prepararse antes del cierre. Verás “Sin cupos” o “No alcanza a prepararse antes del cierre”.',
+      chips: ['Ver menú', 'Horarios de recogida', 'Mi pedido'],
+    });
+
+    const orderAnswer = () => ({
+      text: 'Estados de un pedido:\n\n1. **Pago pendiente** — solo en transferencia, mientras la cafetería confirma.\n2. **Recibido** — ya entró a la cola.\n3. **Preparando** — la cafetería lo está haciendo.\n4. **Listo para recoger** — muestra tu código en la cafetería.\n\nPuedes ver tus pedidos en la sección **Mis pedidos** de la app. El código tiene el formato UD-XXXXXX.',
+      chips: ['Cancelar un pedido', 'Formas de pago', 'Ver menú'],
+    });
+
+    const cancelAnswer = () => ({
+      text: 'Puedes cancelar un pedido así:\n\n• **Estudiante**: en *Mis pedidos*, mientras esté en **Pago pendiente** o **Recibido**.\n• **Cafetería (admin)**: desde la cola, en **Recibido**, **Preparando** o **Listo**.\n\nAl cancelar se devuelve el stock de los productos. Si ya está en preparación, solo la cafetería puede cancelarlo.',
+      chips: ['Mi pedido', 'Formas de pago', 'Hablar con la cafetería'],
+    });
+
+    const adminAnswer = () => ({
+      text: 'Soy un asistente virtual, no una persona. Si necesitas hablar con la cafetería, el personal puede atenderte en el mostrador.\n\nEl panel de administración está en **/admin** y se entra con un correo que empiece por `admin@…` (por ejemplo, `admin@udes.edu.co`). Desde ahí se gestionan pedidos, menú, stock y transferencias.',
+      chips: ['Cafeterías y horarios', 'Ver menú', 'Mi pedido'],
+    });
+
+    const priceAnswer = () => ({
+      text: 'Los precios principales son:\n\n• Almuerzo del día: $15.000 en mesa / $17.700 para llevar.\n• Proteína + 1 acompañante: $11.000 / $12.600.\n• Proteína sola: $7.500.\n• Almuerzos de Yariguíes: $10.000 a $15.000.\n• Café: desde $3.500.\n• Agua: desde $2.000.\n• Snacks: desde $2.000.\n\n¿Quieres el precio de un producto específico?',
+      chips: ['Café', 'Agua', 'Empanada', 'Almuerzo del día'],
+    });
+
+    const optionsAnswer = () => ({
+      text: 'Productos con opciones:\n\n• **Agua**: 300 ml ($2.000) o 600 ml ($3.000), con o sin gas.\n• **Café**: americano, latte, capuchino o mocaccino.\n• **Empanada**: pollo, carne o mixta.\n• **Proteína**: carne con chimichurri o lomitos de pollo.\n• **Proteína + 1 acompañante**: eliges proteína y acompañante (sopa, arroz, garbanzos o ensalada).\n• **Almuerzo del día**: eliges la proteína.',
+      chips: ['Agua', 'Café', 'Empanada', 'Proteína'],
+    });
+
+    const thanks = () => ({
+      text: 'Con gusto. Si necesitas algo más, aquí estoy.',
+      chips: ['Ver menú', 'Cafeterías y horarios', 'Mi pedido'],
+    });
+
+    const bye = () => ({
+      text: 'Hasta luego. Que disfrutes tu pedido.',
+      chips: ['Ver menú', 'Cafeterías y horarios'],
+    });
+
+    const fallback = () => ({
+      text: 'No estoy segura de haber entendido. Puedo ayudarte con:\n\n• Menú y precios.\n• Cafeterías y horarios.\n• Opciones de agua, café, empanada y proteína.\n• Cupos y horas de recogida.\n• Pagos (tarjeta o transferencia QR).\n• Estado o cancelación de un pedido.\n\nPrueba con una de estas opciones:',
+      chips: ['Ver menú', 'Precios', 'Cafeterías y horarios', 'Formas de pago', 'Mi pedido', 'Cancelar un pedido'],
+    });
+
+    function replyTo(text) {
+      const n = normalize(text);
+      const product = findProduct(n);
+
+      if (product && /(precio|cuanto|vale|cuesta|opcion|opciones|sabor|tamano|ml|gas|stock|agotado|disponible)/.test(n)) {
+        return productAnswer(product);
+      }
+      if (product && n.split(' ').length <= 4) {
+        return productAnswer(product);
+      }
+
+      if (/(cancelar|cancelo|anular|devolucion|reembolso)/.test(n)) return cancelAnswer();
+      if (/(pago|pagar|tarjeta|transferencia|qr|comprobante|nequi|daviplata|efectivo)/.test(n)) return paymentAnswer();
+      if (/(cupo|cupos|lleno|franja|reserva)/.test(n)) return slotsAnswer();
+      if (/(estado|pedido|pedidos|codigo|listo|preparando|recoger|recogida)/.test(n)) return orderAnswer();
+      if (/(admin|administrador|panel|persona|humano|contacto|telefono|hablar con)/.test(n)) return adminAnswer();
+      if (/(desayuno|desayunos|huevos|pericos|sandwich)/.test(n)) return breakfastAnswer();
+      if (/(almuerzo|menu|proteina|acompanante|sopa|arroz|ensalada|costillas|pechuga|cerdo|alitas|lasana|salchipapa)/.test(n)) return menuAnswer(n);
+      if (/(bebida|bebidas|cafe|agua|jugo|gaseosa|energizante|limonada)/.test(n)) return drinksAnswer();
+      if (/(snack|snacks|empanada|papas|chocorramo|galletas|chocolatina|mani|tienda)/.test(n)) return snacksAnswer();
+      if (/(precio|precios|cuanto|vale|cuesta|valor|tarifa)/.test(n)) return priceAnswer();
+      if (/(opcion|opciones|variedad|sabor|relleno)/.test(n)) return optionsAnswer();
+      if (/(cafeteria|cafeterias|donde|sede|buses|yarigues|yariguies|flores|medicina)/.test(n)) return cafeteriasAnswer();
+      if (/(horario|horarios|hora|abren|cierran|cierre|apertura)/.test(n)) return scheduleAnswer();
+      if (/(hola|buenas|buenos dias|buenas tardes|hey|saludos)/.test(n)) return greeting();
+      if (/(gracias|genial|perfecto|muchas gracias)/.test(n)) return thanks();
+      if (/(adios|chao|hasta luego|nos vemos)/.test(n)) return bye();
+
+      return fallback();
+    }
+
+    /* ---------- Render ---------- */
+    function addMessage(role, text) {
+      const wrapper = document.createElement('div');
+      wrapper.className = `msg ${role}`;
+
+      if (role === 'bot') {
+        const avatar = document.createElement('img');
+        avatar.className = 'avatar-sm';
+        avatar.src = BOT_AVATAR;
+        avatar.alt = 'Sofía, asistente virtual';
+        wrapper.appendChild(avatar);
+      }
+
+      const stack = document.createElement('div');
+      stack.className = 'stack';
+
+      if (role === 'bot') {
+        const meta = document.createElement('span');
+        meta.className = 'meta';
+        meta.textContent = 'Sofía · Asistente virtual';
+        stack.appendChild(meta);
+      }
+
+      const bubble = document.createElement('div');
+      bubble.className = 'bubble';
+      bubble.innerHTML = renderText(text);
+      stack.appendChild(bubble);
+      wrapper.appendChild(stack);
+
+      messagesEl.appendChild(wrapper);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    function addTyping() {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'msg bot';
+      wrapper.id = 'typing';
+
+      const avatar = document.createElement('img');
+      avatar.className = 'avatar-sm';
+      avatar.src = BOT_AVATAR;
+      avatar.alt = '';
+      wrapper.appendChild(avatar);
+
+      const bubble = document.createElement('div');
+      bubble.className = 'bubble typing';
+      bubble.setAttribute('aria-label', 'Sofía está escribiendo');
+      bubble.innerHTML = '<span></span><span></span><span></span>';
+      wrapper.appendChild(bubble);
+
+      messagesEl.appendChild(wrapper);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    function removeTyping() {
+      document.getElementById('typing')?.remove();
+    }
+
+    function setChips(chips) {
+      quickEl.innerHTML = '';
+      for (const chip of chips || []) {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'chip';
+        button.textContent = chip;
+        button.addEventListener('click', () => send(chip));
+        quickEl.appendChild(button);
+      }
+    }
+
+    function send(text) {
+      const value = String(text || '').trim();
+      if (!value) return;
+
+      addMessage('user', value);
+      input.value = '';
+      setChips([]);
+      sendBtn.disabled = true;
+      addTyping();
+
+      const delay = 450 + Math.round(Math.random() * 350);
+      setTimeout(() => {
+        removeTyping();
+        const answer = replyTo(value);
+        addMessage('bot', answer.text);
+        setChips(answer.chips);
+        sendBtn.disabled = false;
+        input.focus();
+      }, delay);
+    }
+
+    function resetChat() {
+      messagesEl.innerHTML = '';
+      const first = greeting();
+      addMessage('bot', first.text);
+      setChips(first.chips);
+      input.focus();
+    }
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      send(input.value);
+    });
+
+    resetBtn.addEventListener('click', resetChat);
+
+    resetChat();
+  </script>
+</body>
+</html>

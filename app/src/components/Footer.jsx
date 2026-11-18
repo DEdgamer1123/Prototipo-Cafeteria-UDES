@@ -10,6 +10,15 @@ export default function Footer() {
         <img src={logoAlt} alt="Universidad de Santander UDES" className="h-10 w-auto object-contain sm:h-12" />
         <p className="text-xs text-slate-500 sm:text-sm">
           © {YEAR} Universidad de Santander · <span className="font-semibold text-udes-blue">UDES Food</span> — prototipo académico
+          <span className="mx-1" aria-hidden="true">·</span>
+          <a
+            href="/chat.html"
+            target="_blank"
+            rel="noreferrer"
+            className="font-semibold text-udes-blue hover:underline"
+          >
+            Asistente virtual
+          </a>
         </p>
       </div>
     </footer>
